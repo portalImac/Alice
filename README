@@ -16,4 +16,9 @@ git push
 voir les modifications :
 gitk
 
+______________
+Dans le code :
+______________
+Camera (perspective, position) : in constructor of PortalApplication on Application.cpp
+Creation object : in constructor of PortalApplication on Application.cpp
 
