@@ -23,8 +23,8 @@ Scene::~Scene()
         delete this->storedObjects[iStoredObjects];
 
     delete this->camera;
-    delete this->cameraEntry;
-    delete this->cameraExit;
+    if(this->cameraEntry != NULL) delete this->cameraEntry;
+    if(this->cameraExit != NULL) delete this->cameraExit;
     delete [] this->storedObjects;
     delete [] this->drawnObjects;
     delete [] this->drawnObjectsColors;
@@ -39,6 +39,7 @@ Scene::~Scene()
 // and sets the numbers of objects to 0
 void Scene::init()
 {
+
     // Fixed max sizes for arrays
     this->maxStoredObjects=50;
     this->maxDrawnObjects=200;
@@ -76,6 +77,9 @@ void Scene::init()
 
     // Creation and initialisation of a camera
     this->camera=new Camera();
+
+    this->cameraEntry = NULL;
+    this->cameraExit = NULL;
 }
 
 
