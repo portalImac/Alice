@@ -28,7 +28,7 @@ int main(int argc, char **argv)
 
 	// Scene creation
     std::cout<<"    Scene creation"<<std::endl;
-    Scene * scene=new Scene();
+    Scene * scene=new Scene(800, 600);
     application->setScene(scene);
     GLfloat red[]={1.0, 0.0, 0.0, 1.0};
     scene->setDefaultColor(red); // Color for the objects drawn in the scene

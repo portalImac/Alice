@@ -186,7 +186,7 @@ void Application::customizeStates()
 void Application::setScene(Scene * scene)
 {
 	this->scene=scene;
-	resize(this->width, this->height);
+	resize(this->scene->width, this->scene->height);
 }
 
 
@@ -233,7 +233,7 @@ void Application::resize(GLuint w, GLuint h)
         //std::cout<<SDL_GetError()<<std::endl;
         //this->customizeStates();
     //#else
-        this->drawContext = SDL_SetVideoMode(this->width, this->height, 0, this->videoModeFlags);
+        this->drawContext = SDL_SetVideoMode(this->windowedWidth, this->windowedHeight, 0, this->videoModeFlags);
     //#endif
 	
     

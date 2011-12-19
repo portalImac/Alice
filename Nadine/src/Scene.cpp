@@ -11,9 +11,9 @@
 
 
 // Default constructor
-Scene::Scene()
+Scene::Scene(unsigned int width, unsigned int height)
 {
-    this->init();
+    this->init(width, height);
 }
 
 // Cleans memory for Scene
@@ -37,8 +37,11 @@ Scene::~Scene()
 
 // Initializes all the pointers to NULL
 // and sets the numbers of objects to 0
-void Scene::init()
+void Scene::init(unsigned int width, unsigned int height)
 {
+
+    this->width = width;
+    this->height = height;
 
     // Fixed max sizes for arrays
     this->maxStoredObjects=50;

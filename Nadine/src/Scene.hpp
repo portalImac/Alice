@@ -16,6 +16,10 @@ struct Object;
 class Scene
 {
     public:
+
+	unsigned int width;
+	unsigned int height;
+		
         GLuint maxStoredObjects;         // An initial limit of storable objects
         GLuint maxDrawnObjects;          // An initial limit of drawable objects
         
@@ -43,10 +47,10 @@ class Scene
         GLuint * drawnObjectsTexture0IDs; // ID of the texture to use on each drawn object for unit 0
         GLuint * drawnObjectsTexture1IDs; // ID of the texture to use on each drawn object for unit 1
 
-        Scene();
+        Scene(unsigned int width, unsigned int height);
         ~Scene();
 
-        void init();
+        void init(unsigned int width, unsigned int height);
 
         GLuint storeObject(Object * object);
         void setDrawnObjectTextureID(GLuint indexDrawnObject, GLuint textureUnit, GLuint textureID);
@@ -69,4 +73,4 @@ class Scene
         void drawObjectsOfScene();
 };
 
-#endif // __SCENE_HPP__
+#endif // __SCENE_HPP__widthScene, unsigned int heightScene
