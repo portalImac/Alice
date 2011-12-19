@@ -222,37 +222,29 @@ Uint32 genericTimer(Uint32 interval, void* param)
 // resize doesn't work on Mac os (Windows ?)
 void Application::resize(GLuint w, GLuint h)
 {
-    std::cout<<"Window resize  : ["<<w<<","<<h<<"]"<<std::endl;
+    //std::cout<<"Window resize  : ["<<w<<","<<h<<"]"<<std::endl;
     
     this->width=w;
     this->height=h;
 
-    /*GLfloat ratio = w/h;
-
-    this->scene->camera->left *= ratio ;
-    this->scene->camera->right *= ratio ;
-    this->scene->camera->top *= ratio ;
-    this->scene->camera->bottom *= ratio ;
-
-    this->scene->camera->updateProjection();*/
-
-
-    /*this->scene->camera->setPerspectiveFromAngle(40, 2.9);
-    this->scene->camera->updateProjection();*/
-
-
 	//SDL_VideoMode update (restart the OpenGL context on windows, does not work on mac os...)
-	#ifdef __APPLE__ | WIN32 // was not tested
+	//#ifdef __APPLE__ | WIN32 // was not tested
         //this->drawContext = SDL_SetVideoMode(this->width, this->height, 0, this->videoModeFlags);
         //std::cout<<SDL_GetError()<<std::endl;
         //this->customizeStates();
-    #else
+    //#else
         this->drawContext = SDL_SetVideoMode(this->width, this->height, 0, this->videoModeFlags);
-    #endif
+    //#endif
 	
     
     // Viewport transformation update to fit initial window size
     glViewport(0, 0, this->width, this->height);
+
+    // Projection transformation update
+        // Keeping the angle constant
+    GLfloat fovy=M_PI/3.0;
+    GLfloat aspectRatio=this->width/GLfloat(this->height);
+    this->scene->camera->setPerspectiveFromAngle(fovy, aspectRatio);
 }
 
 //
@@ -335,7 +327,102 @@ void Application::changeBackground()
 // Distributes task for the "key" kind of events 
 // For example : std::cout when b key is pressed
 // down is true when the key is pressed, false when released
+
+
+
 void Application::handleKeyEvent(SDL_keysym& keysym, bool down)
+{
+    // unit is at 1 when the key is pressed and at -1 when released
+    float unit=-1.0;
+    if (down) unit=1.0;
+    
+    if (down)
+    {
+        switch(keysym.sym)
+        {
+        
+            std::cout<<"down"<<std::endl;
+        	case SDLK_ESCAPE:
+          		this->done=true;
+          	break;
+          	
+        	case SDLK_c:
+			if(this->scene->camera->perspectiveProjection==true)
+				this->scene->camera->perspectiveProjection=false;
+			else
+				this->scene->camera->perspectiveProjection=true;
+			this->scene->camera->updateProjection();
+		break;
+          	
+        	case SDLK_w :
+                std::cout<<"Key \"w\" was pressed."<<std::endl;
+          		switchWireframe();
+          	break;
+          	
+          	case SDLK_f :
+          	    std::cout<<"Key \"f\" was pressed."<<std::endl;
+          	    printFPS();
+          	break;
+          	
+         	case SDLK_F5 :
+                std::cout<<"Key \"F5\" was pressed."<<std::endl;
+          		switchFullScreen();
+          	break; 
+          	    	
+          	
+          	default:
+      	    break;
+      	}
+    }
+
+    switch(keysym.sym)
+    {
+        // Camera controls
+      	// Keys are associated with x, y, z direction for move.
+      	// moveFlags holds a 3D vector of direction
+      	// each coordinates of moveFlags is in the end : -1, 0 or 1.   	
+        
+        case SDLK_UP :
+        case SDLK_z :
+            //std::cout<<"Forward."<<std::endl;
+      		this->moveFlags[2]-=unit;
+      	break;
+      	
+    	case SDLK_DOWN :
+    	case SDLK_s :
+            //std::cout<<"Backward."<<std::endl;
+      		this->moveFlags[2]+=unit;
+      	break;
+      	
+      	case SDLK_LEFT :
+      	case SDLK_q :
+            //std::cout<<"Left."<<std::endl;
+      		this->moveFlags[0]-=unit;
+      	break;
+      	
+      	case SDLK_RIGHT :
+      	case SDLK_d :
+            //std::cout<<"Right."<<std::endl;
+      		this->moveFlags[0]+=unit;
+      	break;
+      	
+      	case SDLK_PAGEUP :
+            //std::cout<<"Up."<<std::endl;
+      		this->moveFlags[1]+=unit;
+      	break;
+      	
+      	case SDLK_PAGEDOWN :
+            //std::cout<<"Down."<<std::endl;
+      		this->moveFlags[1]-=unit;
+      	break;  
+
+    	default:
+      	break;
+  	}
+}
+
+
+/*void Application::handleKeyEvent(SDL_keysym& keysym, bool down)
 {
     // Si on appuie sur une touche
     if (down)
@@ -406,8 +493,6 @@ void Application::handleKeyEvent(SDL_keysym& keysym, bool down)
       	}
     }
 
-    else if(!down)
-    {
         switch(keysym.sym)
         {
 		case SDLK_z:
@@ -434,10 +519,9 @@ void Application::handleKeyEvent(SDL_keysym& keysym, bool down)
 			this->moveFlags[1]=0;
 		break;
 	}
-    }
 }
 
-
+*/
 
 
 
@@ -534,65 +618,68 @@ void Application::loop()
 
 void Application::animate()
 {
-//Lune tourne autour d'elle même ET de la Terre
+
 	this->cntAnimation++;
-	/*GLfloat SLune[16];
-	GLfloat sLune[4] = {0.05,
-		    0.05,
-		    0.05,
-		    1.0
-		    };
-	setToScale(SLune, sLune);
-
-	GLfloat TLune[16];
-	GLfloat tLune[4] =  {0.75,
-			0.0,
-			0.0,
-			1.0
-			};
-	setToTranslate(TLune, tLune);
-	multMatrixBtoMatrixA(TLune, SLune);*/
-
-    //scene->setDrawnObjectModel(2, );
 }
 
+// Moves with a FPS camera
 void Application::moveFPS()
 {
+    // Motion motion information retrieval
+    // Comment if mouse motion events are enabled
+    SDL_PumpEvents();
+    int mouseRelX, mouseRelY;
+	#ifdef __APPLE__
+        int mystery=0;
+        SDL_GetRelativeMouseState(mystery, &mouseRelX, &mouseRelY);
+    #else
+        SDL_GetRelativeMouseState(&mouseRelX, &mouseRelY);
+    #endif
+    
+	this->xMousePosition+=2.0*mouseRelX/(GLfloat)this->width;
+	this->yMousePosition+=-2.0*mouseRelY/(GLfloat)this->height;
+
+
 
 	GLfloat moveStep=0.02;
 	GLfloat cameraNewPos[3];
 	GLfloat moveOnX=this->moveFlags[0]*moveStep;
 	GLfloat moveOnY=this->moveFlags[1]*moveStep;
 	GLfloat moveOnZ=this->moveFlags[2]*moveStep;
-
-	for(GLuint i=0; i<3; i++) {
-		cameraNewPos[i] = this->scene->camera->c[i] + this->scene->camera->x[i]*moveOnX + this->scene->camera->y[i]*moveOnY + this->scene->camera->z[i]*moveOnZ;
+	for (GLuint iCoord=0 ; iCoord<3 ; iCoord++)
+	{
+		cameraNewPos[iCoord]=this->scene->camera->c[iCoord]
+							+this->scene->camera->x[iCoord]*moveOnX
+							+this->scene->camera->y[iCoord]*moveOnY
+							+this->scene->camera->z[iCoord]*moveOnZ;
 	}
 
+	GLfloat angleForWindowWidth=M_PI;
+	GLfloat angleForWindowHeight=M_PI/2.0;
+	GLfloat angleLong=this->xMousePosition*angleForWindowWidth;
+	GLfloat angleLat=this->yMousePosition*angleForWindowHeight;
 
-	GLfloat angleForWindowWidth = M_PI;
-	GLfloat angleForWindowHeight = M_PI/2.0;
-	GLfloat angleLong = this->xMousePosition*angleForWindowWidth;
-	GLfloat angleLat = this->yMousePosition*angleForWindowHeight;
 
-	GLfloat xAxis[]={1.0,0.0,0.0};
-	GLfloat yAxis[]={0.0,1.0,0.0};
+	// Method with rotates
+
+	GLfloat xAxis[]={1.0, 0.0, 0.0}; GLfloat yAxis[]={0.0, 1.0, 0.0};
 	GLfloat rotateAroundX[16]; setToRotate(rotateAroundX, -angleLat, xAxis);
 	GLfloat rotateAroundY[16]; setToRotate(rotateAroundY, angleLong, yAxis);
-	GLfloat t[] = {-cameraNewPos[0], -cameraNewPos[1], -cameraNewPos[2]};
+	GLfloat t[]={-cameraNewPos[0], -cameraNewPos[1], -cameraNewPos[2]};
 	GLfloat translate[16]; setToTranslate(translate, t);
 
 	setToIdentity(this->scene->camera->view);
-
 	multMatrixBtoMatrixA(this->scene->camera->view, rotateAroundX);
 	multMatrixBtoMatrixA(this->scene->camera->view, rotateAroundY);
 	multMatrixBtoMatrixA(this->scene->camera->view, translate);
 
-	for(GLuint i=0; i<3; i++) {
-		this->scene->camera->x[i] = this->scene->camera->view[i*4+0];
-		this->scene->camera->y[i] = this->scene->camera->view[i*4+1];
-		this->scene->camera->z[i] = this->scene->camera->view[i*4+2];
-		this->scene->camera->c[i] = cameraNewPos[i];
+	for (GLuint iCoord=0 ; iCoord<3 ; iCoord++)
+	{
+		// Updates the axis with values in view
+		this->scene->camera->x[iCoord]=this->scene->camera->view[iCoord*4+0];
+		this->scene->camera->y[iCoord]=this->scene->camera->view[iCoord*4+1];
+		this->scene->camera->z[iCoord]=this->scene->camera->view[iCoord*4+2];
+		// Updates the position of the camera c
+		this->scene->camera->c[iCoord]=cameraNewPos[iCoord];
 	}
-	
 }
