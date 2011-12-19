@@ -36,6 +36,8 @@ class Scene
         GLfloat lightPower;              // Power of the light used in shader
         
         Camera * camera;                 // Camera used to watch the scene
+	Camera * cameraEntry;            // Camera used to watch the entry of a portal
+	Camera * cameraExit;             // Camera used to watch the exit of a portal
 
         GLuint defaultTextureID;         // Default textureID for drawn elements
         GLuint * drawnObjectsTexture0IDs; // ID of the texture to use on each drawn object for unit 0

@@ -23,7 +23,7 @@ int main(int argc, char **argv)
     
     // Application creation
     std::cout<<"  Application creation"<<std::endl;
-    Application * application=new Application();
+    Application * application=new Application(800, 600);
     //__________________________________________________________________________ 
 
 	// Scene creation

@@ -61,10 +61,10 @@ class Application
         
         GLfloat backgroundColor[4];             // Color of the background;
 
-        Application();
+        Application(unsigned int width, unsigned int height);
         ~Application();
         
-        void init();
+        void init(unsigned int width, unsigned int height);
         void initSDLOpenGL();
 	void switchFullScreen ();
         void customizeStates();

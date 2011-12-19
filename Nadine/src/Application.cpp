@@ -14,9 +14,9 @@
 
 
 // Default constructor
-Application::Application()
+Application::Application(unsigned int width, unsigned int height)
 {
-    this->init();
+    this->init(width, height);
 }
 
 
@@ -31,7 +31,7 @@ Application::~Application()
 
 
 // Sets the application parameters and does all the initialisation
-void Application::init()
+void Application::init(unsigned int width, unsigned int height)
 {
     this->scene=NULL;
     
@@ -64,8 +64,8 @@ void Application::init()
     this->mouse=true;
     
     // Window size initialization (for windowed mode)
-	this->windowedWidth=800;
-	this->windowedHeight=600;
+	this->windowedWidth=width;
+	this->windowedHeight=height;
 	
 	// Mouse position, pressed position and scroll data initilaization
     // Positions : floats, origin in center, sides at +/-1 or more
@@ -422,109 +422,6 @@ void Application::handleKeyEvent(SDL_keysym& keysym, bool down)
 }
 
 
-/*void Application::handleKeyEvent(SDL_keysym& keysym, bool down)
-{
-    // Si on appuie sur une touche
-    if (down)
-    {
-        switch(keysym.sym)
-        {
-        	case SDLK_ESCAPE:
-          		this->done=true;
-          	break;
-
-		// Si on appuie sur la touche ESPACE
-		case SDLK_SPACE:
-			std::cout<<"Key \"space\" was pressed. Bravo!"<<std::endl;
-          	break;
-
-		// Si on appuie sur la touche "w"
-		case SDLK_w:
-			// Change en mode plein ou en mode fil de fer
-			switchWireframe();	
-          	break;
-
-		case SDLK_b:
-			changeBackground();
-		break;
-          	
-          	case SDLK_f :
-          	    std::cout<<"Key \"f\" was pressed."<<std::endl;
-          	    printFPS();
-          	break;
-
-		case SDLK_F5 :
-			//std::cout<<"plein écran"<<std::endl;
-			switchFullScreen ();
-		break;
-
-		case SDLK_c:
-			if(this->scene->camera->perspectiveProjection==true)
-				this->scene->camera->perspectiveProjection=false;
-			else
-				this->scene->camera->perspectiveProjection=true;
-			this->scene->camera->updateProjection();
-		break;
-
-		case SDLK_z:
-			this->moveFlags[2]-=1;
-		break;
-
-		case SDLK_s:
-			this->moveFlags[2]+=1;
-		break;
-
-		case SDLK_q:
-			this->moveFlags[0]-=1;
-		break;
-
-		case SDLK_d:
-			this->moveFlags[0]+=1;
-		break;
-
-		case SDLK_PAGEUP:
-			this->moveFlags[1]+=1;
-		break;
-		
-		case SDLK_PAGEDOWN:
-			this->moveFlags[1]-=1;
-		break;
-
-      	}
-    }
-
-        switch(keysym.sym)
-        {
-		case SDLK_z:
-			this->moveFlags[2]=0;
-		break;
-
-		case SDLK_s:
-			this->moveFlags[2]=0;
-		break;
-
-		case SDLK_q:
-			this->moveFlags[0]=0;
-		break;
-
-		case SDLK_d:
-			this->moveFlags[0]=0;
-		break;
-	
-		case SDLK_PAGEUP:
-			this->moveFlags[1]=0;
-		break;
-
-		case SDLK_PAGEDOWN:
-			this->moveFlags[1]=0;
-		break;
-	}
-}
-
-*/
-
-
-
 // Listens to events during the whole time of the application
 // and distributes corresponding tasks
 void Application::handleEvent(SDL_Event& event)
@@ -551,7 +448,18 @@ void Application::handleEvent(SDL_Event& event)
 	case SDL_MOUSEMOTION:
 		this->xMousePosition += 2.0*event.motion.xrel/(GLfloat)this->width;
 		this->yMousePosition += -2.0*event.motion.xrel/(GLfloat)this->height;
-	break;                 
+	break;
+	
+
+	case SDL_MOUSEBUTTONDOWN:
+		if (event.button.button == SDL_BUTTON_LEFT) {
+                	this->scene->cameraEntry = new Camera();
+			//this->scene->cameraEntry->c[2] = -2.0;
+		}
+            	else if (event.button.button == SDL_BUTTON_RIGHT)
+                	this->scene->cameraExit = new Camera();
+	break;
+	               
             
         // Quit event (for example sent when the window is closed)
         case SDL_QUIT:
