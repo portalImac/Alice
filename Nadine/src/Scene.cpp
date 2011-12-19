@@ -23,6 +23,8 @@ Scene::~Scene()
         delete this->storedObjects[iStoredObjects];
 
     delete this->camera;
+    delete this->cameraEntry;
+    delete this->cameraExit;
     delete [] this->storedObjects;
     delete [] this->drawnObjects;
     delete [] this->drawnObjectsColors;
