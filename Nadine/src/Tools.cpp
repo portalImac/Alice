@@ -39,6 +39,25 @@ void vectorProduct (GLfloat * a, GLfloat * b, GLfloat * result)
 	result[2]=a[0]*b[1] - a[1]*b[0];
 }
 
+// Returns the dot product between a and b
+GLfloat dotProduct(GLfloat * a, GLfloat * b)
+{
+    GLfloat result=0.0;
+    for (GLuint iCoord=0 ; iCoord<3 ; iCoord++)
+    {
+        result+=a[iCoord]*b[iCoord];
+    }
+    return result;
+}
+
+// Returns the scalar triple product between a, b and c
+GLfloat scalarTriple(GLfloat * a, GLfloat * b, GLfloat * c)
+{
+    GLfloat result[4];
+    vectorProduct (b, c, result);
+    return dotProduct(a, result);
+}
+
 //
 void normalFace(GLfloat * O, GLfloat * A, GLfloat * B, GLfloat * normal, bool toNormalize)
 {
