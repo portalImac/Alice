@@ -5,18 +5,17 @@ IMAC 2012
 ____
 command
 Récupérer des fichier : 
-git pull
+git pull (récupérer les données)
 
 Envoyer des fichiers :
-git status (voir les fichiers changés, ajoutés, etc.)
+git status (voir les fichiers changés, ajoutés, etc...)
 git add nom_du_fichier
 git commit (faire un commentaire)
 git push
 
 voir les modifications :
 gitk
-
-______________
+__________
 Dans le code :
 ______________
 Camera (perspective, position) : in constructor of PortalApplication on Application.cpp
