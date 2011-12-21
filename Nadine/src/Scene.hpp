@@ -71,6 +71,8 @@ class Scene
         void setDefaultTextureID(GLuint defaultTextureID);
 
         void drawObjectsOfScene();
+
+        void throwRay(GLfloat xMouse, GLfloat yMouse);
 };
 
 #endif // __SCENE_HPP__widthScene, unsigned int heightScene

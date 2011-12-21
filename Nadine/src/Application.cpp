@@ -365,9 +365,9 @@ void Application::handleKeyEvent(SDL_keysym& keysym, bool down)
           	break;
           	
          	case SDLK_F5 :
-                std::cout<<"Key \"F5\" was pressed."<<std::endl;
+                    std::cout<<"Key \"F5\" was pressed."<<std::endl;
           		switchFullScreen();
-          	break; 
+                break;
           	    	
           	
           	default:
@@ -455,6 +455,7 @@ void Application::handleEvent(SDL_Event& event)
 		if (event.button.button == SDL_BUTTON_LEFT) {
                 	this->scene->cameraEntry = new Camera();
 			//this->scene->cameraEntry->c[2] = -2.0;
+                        this->scene->throwRay(this->xMousePosition, this->yMousePosition);
 		}
             	else if (event.button.button == SDL_BUTTON_RIGHT)
                 	this->scene->cameraExit = new Camera();

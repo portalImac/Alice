@@ -543,4 +543,41 @@ uint64_t getTime()
     return ((uint64_t)ts.tv_sec * 1000000LL) + ((uint64_t)ts.tv_nsec / 1000LL);
 }
 
+// Returns true if intersection between ray (from position pos with direction dir)
+// and triangle ABC, if true : intersection point in result.
+bool intersectRayTriangle(GLfloat * pos, GLfloat * dir, GLfloat * normal, GLfloat * A, GLfloat * B, GLfloat * C,
+GLfloat * result)
+{
+    GLfloat t=(dotProduct(normal, A) - dotProduct(normal, pos))/dotProduct(normal, dir);
+    if (t<0.0) return false;
+
+    GLfloat pa[4]; GLfloat pb[4]; GLfloat pc[4];
+    for (GLuint iCoord=0 ; iCoord<4 ; iCoord++)
+    {
+        pa[iCoord]=A[iCoord]-pos[iCoord];
+        pb[iCoord]=B[iCoord]-pos[iCoord];
+        pc[iCoord]=C[iCoord]-pos[iCoord];
+    }
+
+    // Test intersection against triangle ABC
+    GLfloat u=scalarTriple(dir, pc, pb);
+    if (u<0.0) return false;
+
+    GLfloat v=scalarTriple(dir, pa, pc);
+    if (v<0.0) return false;
+
+    GLfloat w=scalarTriple(dir, pb, pa);
+    if (w<0.0) return false;
+
+    // Compute r, r=u*a+v*b+w*c, from barycentric coordinates (u, v, w)
+    GLfloat denom=1.0/(u+v+w);
+    u*=denom;
+    v*=denom;
+    w*=denom; // w=1.0f-u-v;
+    for (GLuint iCoord=0 ; iCoord<3 ; iCoord++)
+        result[iCoord]=u*A[iCoord]+v*B[iCoord]+w*C[iCoord];
+
+    return true;
+}
+
 

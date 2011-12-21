@@ -49,6 +49,9 @@ void changeColor(GLfloat *color);
 
 unsigned char * loadPPM(const std::string & filename, GLuint * width, GLuint * height);
 
+bool intersectRayTriangle(GLfloat * pos, GLfloat * dir, GLfloat * normal, GLfloat * A, GLfloat * B, GLfloat * C,
+GLfloat * result);
+
 uint64_t getTime();
 
 #endif //  __TOOLS_HPP__
