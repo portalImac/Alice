@@ -254,13 +254,15 @@ void Scene::drawObjectsOfScene()
 }
 
 void Scene::throwRay(GLfloat xMouse, GLfloat yMouse) {
-//glRenderMode(GL_RENDER)
-    //GL_SELECT
-    //glLoadName pour les objets afin de savoir qui on récupère à l'itersection du rayon ac l'un d'eux (a faire avt de dessiner)
-    //avt appeler : glInitNames
-    //OU utiliser scene->nbStoredObjects
+
     /*std::cout<<"EN X : "<<xMouse<<", EN Y : "<<yMouse<<std::endl;
     std::cout<<"camX : "<<this->camera->c[0]<<"camY : "<<this->camera->c[1]<<"camZ : "<<this->camera->c[2]<<std::endl;*/
+
+
+//    for (uint i = 0; i<nbDrawnObjects; ++i) {
+//        storedObjects[i];
+//        indicesVboId
+//    }
 
     //compute vector dir
     GLfloat ray[4];
@@ -272,11 +274,14 @@ void Scene::throwRay(GLfloat xMouse, GLfloat yMouse) {
     GLfloat * dir;
     dir = ray;
     //normal à une facette => faire le produits vecto entre deux pts de la facettes
+    /*
     bool intersection;
     intersectRayTriangle(this->camera->c, dir, normal, GLfloat * A, GLfloat * B, GLfloat * C,
     GLfloat * result)
     if (intersection) {
         std::cout<<"INTERSECTION"<<std::endl;
     }
+    */
+
 }
 
