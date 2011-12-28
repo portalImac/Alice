@@ -232,8 +232,8 @@ void buildCube(Object * object)
 	 mY[0], mY[1], mY[2],   mX[0], mX[1], mX[2],   mZ[0], mZ[1], mZ[2],  //G
 	 mY[0], mY[1], mY[2],   mX[0], mX[1], mX[2],   Z[0], Z[1], Z[2] };   //H		    
 	
-	for (int i=0; i<72; ++i)
-	  normals[i] *= -1.0 ; 
+	//for (int i=0; i<72; ++i)
+	  //normals[i] *= -1.0 ; 
 	
 	
 			    

@@ -54,6 +54,28 @@ unsigned char * loadPPM(const std::string & filename, GLuint * width, GLuint * h
 
 bool intersectRayTriangle(GLfloat * pos, GLfloat * dir, GLfloat * normal, GLfloat * A, GLfloat * B, GLfloat * C,
 GLfloat * result);
+//======================== X-tests ========================
+bool axisTestX01(GLfloat a, GLfloat b, GLfloat fa, GLfloat fb, GLfloat * boxHalfSize, GLfloat * v0, GLfloat * v1, GLfloat * v2);
+
+bool axisTestX2(GLfloat a, GLfloat b, GLfloat fa, GLfloat fb, GLfloat * boxHalfSize, GLfloat * v0, GLfloat * v1, GLfloat * v2);
+
+//======================== Y-tests ========================
+bool axisTestY02(GLfloat a, GLfloat b, GLfloat fa, GLfloat fb, GLfloat * boxHalfSize, GLfloat * v0, GLfloat * v1, GLfloat * v2);
+
+bool axisTestY1(GLfloat a, GLfloat b, GLfloat fa, GLfloat fb, GLfloat * boxHalfSize, GLfloat * v0, GLfloat * v1, GLfloat * v2);
+
+//======================== Z-tests ========================
+bool axisTestZ12(GLfloat a, GLfloat b, GLfloat fa, GLfloat fb, GLfloat * boxHalfSize, GLfloat * v0, GLfloat * v1, GLfloat * v2);
+
+bool axisTestZ0(GLfloat a, GLfloat b, GLfloat fa, GLfloat fb, GLfloat * boxHalfSize, GLfloat * v0, GLfloat * v1, GLfloat * v2);
+
+void minMax(GLfloat x0, GLfloat x1, GLfloat x2, GLfloat * min, GLfloat * max);
+
+bool planeBoxOverlap(GLfloat * normal, GLfloat * vert, GLfloat * maxbox);
+
+
+bool intersectAABBTriangle(GLfloat * boxHalfSize, GLfloat * normal, GLfloat *
+A, GLfloat * B, GLfloat * C);
 
 uint64_t getTime();
 

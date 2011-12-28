@@ -582,22 +582,47 @@ void Application::moveFPS()
 	multMatrixBtoMatrixA(this->scene->camera->view, rotateAroundY);
 	multMatrixBtoMatrixA(this->scene->camera->view, translate);
 
-	
-	GLfloat Tr[16];
-	GLfloat tr[3] = {0.0, 0.0, -(scene->camera->near) - 0.1} ;
-	setToTranslate(Tr, tr);
-	
-	GLfloat Sc[16];
-	GLfloat sc[3] = {0.05, 0.05, 0.0} ;
-	setToScale(Sc, sc);
+	//position de la boundingBox
 	
 	GLfloat invView[16];
 	getInverseGenericMatrix(scene->camera->view, invView);
 	
-	multMatrixBtoMatrixA(Tr, Sc);
-	multMatrixBtoMatrixA(invView, Tr);
+	/*
+	GLfloat mHeros[16];
+	for (int i=0; i<16; ++i)
+		mHeros[i] = invView[i];
 		
-	scene->setDrawnObjectModel(2, invView);  
+			
+	GLfloat THeros[16];
+	GLfloat tHeros[3] = {0.0, 0.0, -(scene->camera->near) - 0.2 } ;
+	setToTranslate(THeros, tHeros);
+		
+	GLfloat SHeros[16];
+	GLfloat sHeros[3] = {0.03, 0.08, 0.03} ;
+	setToScale(SHeros, sHeros);
+	
+	multMatrixBtoMatrixA(THeros, SHeros);
+	multMatrixBtoMatrixA(mHeros, THeros);
+	
+	scene->setDrawnObjectModel(1, mHeros); */ 
+	
+	
+	//position de la cible
+	
+	
+	
+	GLfloat TCible[16];
+	GLfloat tCible[3] = {0.0, 0.0, -(scene->camera->near) - 0.1} ;
+	setToTranslate(TCible, tCible);
+	
+	GLfloat SCible[16];
+	GLfloat sCible[3] = {0.05, 0.05, 0.0} ;
+	setToScale(SCible, sCible);
+	
+	multMatrixBtoMatrixA(TCible, SCible);
+	multMatrixBtoMatrixA(invView, TCible);
+		
+	scene->setDrawnObjectModel(1, invView);  
 
 	for (GLuint iCoord=0 ; iCoord<3 ; iCoord++)
 	{
@@ -606,6 +631,8 @@ void Application::moveFPS()
 		this->scene->camera->y[iCoord]=this->scene->camera->view[iCoord*4+1];
 		this->scene->camera->z[iCoord]=this->scene->camera->view[iCoord*4+2];
 	}
+	
+	
 	// Updates the position of the camera c with cub constraints
 		if ( cameraNewPos[0] > -5.0 && cameraNewPos[0] < 5.0)
 	    this->scene->camera->c[0]=cameraNewPos[0];

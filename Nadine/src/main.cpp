@@ -104,18 +104,20 @@ int main(int argc, char **argv)
     Object * objectAxis=new Object(GL_LINES);
     GLuint storedObjectAxisID=scene->storeObject(objectAxis);
     
-    // Définition du cube
-    Object * objectCube=new Object(GL_TRIANGLES);
-    GLuint storedObjectCubeID=scene->storeObject(objectCube);
-    
-    /* Environnement
-    Object * objectLaby=new Object(GL_TRIANGLES);
-    GLuint storedObjectLaby=scene->storeObject(objectLaby);
-    bool smoothObjectFlag=true;*/
+    /* Définition boundingBox
+    Object * objectBB=new Object(GL_TRIANGLES);
+    GLuint storedObjectBBID=scene->storeObject(objectBB);*/
     
     // Définition de la cible
     Object * objectCible=new Object(GL_LINES);
     GLuint storedObjectCibleID=scene->storeObject(objectCible);
+    
+    // Environnement
+    Object * objectLaby=new Object(GL_TRIANGLES);
+    GLuint storedObjectLaby=scene->storeObject(objectLaby);
+    bool smoothObjectFlag=true;
+    
+    
     
 	//__________________________________________________________________________ 
 
@@ -126,15 +128,17 @@ int main(int argc, char **argv)
     // Construction du repère
     buildAxis(objectAxis);
     
-    //Construction du cube
-    buildCube(objectCube);
+    /*Construction boundingBox
+    buildCube(objectBB);*/
 
-    /*environnement
-    std::string fileName="../objs/labyrinthe.obj";
-    buildObjectGeometryFromOBJ(objectLaby, fileName, smoothObjectFlag);*/
-    
-    // Construction de la cible
+	// Construction de la cible
     buildCircle(objectCible, 0.3, 20);
+    
+	//environnement
+    std::string fileName="../objs/labyrinthe3.obj";
+    buildObjectGeometryFromOBJ(objectLaby, fileName, smoothObjectFlag);
+    
+    
     
          
     //__________________________________________________________________________
@@ -167,24 +171,25 @@ int main(int argc, char **argv)
     GLuint axisID=scene->addObjectToDraw(storedObjectAxisID);
     scene->setDrawnObjectShaderID(axisID, lightingShaderID);
     
-    //cube
-    GLfloat S[16];
-	GLfloat s[3] = {10.0, 2.0, 10.0} ;
-	setToScale(S, s);
-    GLuint cubeID=scene->addObjectToDraw(storedObjectCubeID);
-    scene->setDrawnObjectModel(cubeID, S);  
-    scene->setDrawnObjectShaderID(cubeID, lightingShaderID);
+    /*BoundingBox
+    GLuint BBID=scene->addObjectToDraw(storedObjectBBID);
+    scene->setDrawnObjectShaderID(BBID, lightingShaderID);
     
-    /*environnement
-    GLuint labyID=scene->addObjectToDraw(storedObjectLaby);
-    scene->setDrawnObjectShaderID(labyID, lightingShaderID);*/
-        
-        
+    GLfloat yellow[4]={0.0, 0.8, 0.4, 1.0};
+    scene->setDrawnObjectColor(BBID, yellow);*/
+    
     //cible
     GLuint cibleID=scene->addObjectToDraw(storedObjectCibleID);
     scene->setDrawnObjectShaderID(cibleID, lightingShaderID);
-        
     
+    //environnement
+    GLfloat S[16];
+	GLfloat s[3] = {3.0, 2.0, 3.0} ;
+	setToScale(S, s);
+    GLuint labyID=scene->addObjectToDraw(storedObjectLaby);
+    scene->setDrawnObjectModel(labyID, S);
+    scene->setDrawnObjectShaderID(labyID, lightingShaderID);
+        
     GLfloat blue[4]={0.0, 0.3, 0.7, 1.0};
     scene->setDrawnObjectColor(cibleID, blue);
        
