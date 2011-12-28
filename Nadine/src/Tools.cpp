@@ -626,4 +626,164 @@ GLfloat * result)
     return true;
 }
 
+//======================== X-tests ========================
+bool axisTestX01(GLfloat a, GLfloat b, GLfloat fa, GLfloat fb, GLfloat * boxHalfSize, GLfloat * v0, GLfloat * v1, GLfloat * v2)
+{
+	GLfloat p0=a*v0[1]-b*v0[2];
+	GLfloat p2=a*v2[1]-b*v2[2];	
+	
+	GLfloat min, max;
+    if (p0<p2) {min=p0; max=p2;} else {min=p2; max=p0;}
+    
+	GLfloat rad=fa*boxHalfSize[1]+fb*boxHalfSize[2];
+	if (min>rad || max<-rad) return false;
+	return true;
+}
+bool axisTestX2(GLfloat a, GLfloat b, GLfloat fa, GLfloat fb, GLfloat * boxHalfSize, GLfloat * v0, GLfloat * v1, GLfloat * v2)
+{
+	GLfloat p0=a*v0[1]-b*v0[2];
+	GLfloat p1=a*v1[1]-b*v1[2];	
+	
+	GLfloat min, max;
+    if (p0<p1) {min=p0; max=p1;} else {min=p1; max=p0;}
+    
+	GLfloat rad=fa*boxHalfSize[1]+fb*boxHalfSize[2];
+	if (min>rad || max<-rad) return false;
+	return true;
+}
+
+//======================== Y-tests ========================
+bool axisTestY02(GLfloat a, GLfloat b, GLfloat fa, GLfloat fb, GLfloat * boxHalfSize, GLfloat * v0, GLfloat * v1, GLfloat * v2)
+{
+	GLfloat p0=-a*v0[0]+b*v0[2];
+	GLfloat p2=-a*v2[0]+b*v2[2];	
+	
+	GLfloat min, max;
+    if (p0<p2) {min=p0; max=p2;} else {min=p2; max=p0;}
+    
+	GLfloat rad=fa*boxHalfSize[0]+fb*boxHalfSize[2];
+	if (min>rad || max<-rad) return false;
+	return true;
+}
+bool axisTestY1(GLfloat a, GLfloat b, GLfloat fa, GLfloat fb, GLfloat * boxHalfSize, GLfloat * v0, GLfloat * v1, GLfloat * v2)
+{
+	GLfloat p0=-a*v0[0]+b*v0[2];
+	GLfloat p1=-a*v1[0]+b*v1[2];	
+	
+	GLfloat min, max;
+    if (p0<p1) {min=p0; max=p1;} else {min=p1; max=p0;}
+    
+	GLfloat rad=fa*boxHalfSize[0]+fb*boxHalfSize[2];
+	if (min>rad || max<-rad) return false;
+	return true;
+}
+
+//======================== Z-tests ========================
+bool axisTestZ12(GLfloat a, GLfloat b, GLfloat fa, GLfloat fb, GLfloat * boxHalfSize, GLfloat * v0, GLfloat * v1, GLfloat * v2)
+{
+	GLfloat p1=a*v1[0]-b*v1[1];
+	GLfloat p2=a*v2[0]-b*v2[1];
+		
+	GLfloat min, max;
+    if (p2<p1) {min=p2; max=p1;} else {min=p1; max=p2;}
+    
+	GLfloat rad=fa*boxHalfSize[0]+fb*boxHalfSize[1];
+	if (min>rad || max<-rad) return false;
+	return true;
+}
+bool axisTestZ0(GLfloat a, GLfloat b, GLfloat fa, GLfloat fb, GLfloat * boxHalfSize, GLfloat * v0, GLfloat * v1, GLfloat * v2)
+{
+	GLfloat p0=a*v0[0]-b*v0[1];
+	GLfloat p1=a*v1[0]-b*v1[1];
+		
+	GLfloat min, max;
+    if (p0<p1) {min=p0; max=p1;} else {min=p1; max=p0;}
+    
+	GLfloat rad=fa*boxHalfSize[0]+fb*boxHalfSize[1];
+	if (min>rad || max<-rad) return false;
+	return true;
+}
+
+
+void minMax(GLfloat x0, GLfloat x1, GLfloat x2, GLfloat * min, GLfloat * max)
+{
+    (*min)=x0; if (x1<(*min)) (*min)=x1; if (x2<(*min)) (*min)=x2;
+    (*max)=x0; if (x1>(*max)) (*max)=x1; if (x2>(*max)) (*max)=x2;
+}
+
+
+bool planeBoxOverlap(GLfloat * normal, GLfloat * vert, GLfloat * maxbox)
+{
+    float vmin[3], vmax[3], v;
+    for(GLuint iCoord=0 ; iCoord<3 ; iCoord++)
+    {
+        v=vert[iCoord];
+        if(normal[iCoord]>0.0)
+        {
+            vmin[iCoord]=-maxbox[iCoord]-v;
+            vmax[iCoord]= maxbox[iCoord]-v;
+        }
+        else
+        {
+            vmin[iCoord]= maxbox[iCoord]-v;
+            vmax[iCoord]=-maxbox[iCoord]-v;
+        }
+    }
+    if (dotProduct(normal, vmin)>0.0) return false;
+    if (dotProduct(normal, vmax)>=0.0) return true;
+    return false;
+}
+
+
+bool intersectAABBTriangle(GLfloat * boxHalfSize, GLfloat * normal, GLfloat *
+A, GLfloat * B, GLfloat * C)
+{
+    GLfloat fex, fey, fez;
+    GLfloat e0[3], e1[3], e2[3];
+    for (GLuint iCoord=0 ; iCoord<3 ; iCoord++)
+    {
+        // Computes triangle edges
+        e0[iCoord]=B[iCoord]-A[iCoord]; // tri edge 0
+        e1[iCoord]=C[iCoord]-B[iCoord]; // tri edge 1
+        e2[iCoord]=A[iCoord]-C[iCoord]; // tri edge 2
+    }
+
+    // 3)
+    //  Tests the 9 tests first (this was faster)
+    fex=fabsf(e0[0]); fey=fabsf(e0[1]); fez=fabsf(e0[2]);
+    if (!axisTestX01(e0[2], e0[1], fez, fey, boxHalfSize, A, B, C)) return false;
+    if (!axisTestY02(e0[2], e0[0], fez, fex, boxHalfSize, A, B, C)) return false;
+    if (!axisTestZ12(e0[1], e0[0], fey, fex, boxHalfSize, A, B, C)) return false;
+
+    fex=fabsf(e1[0]); fey=fabsf(e1[1]); fez=fabsf(e1[2]);
+    if (!axisTestX01(e1[2], e1[1], fez, fey, boxHalfSize, A, B, C)) return false;
+    if (!axisTestY02(e1[2], e1[0], fez, fex, boxHalfSize, A, B, C)) return false;
+    if (!axisTestZ0 (e1[1], e1[0], fey, fex, boxHalfSize, A, B, C)) return false;
+
+    fex=fabsf(e2[0]); fey=fabsf(e2[1]); fez=fabsf(e2[2]);
+    if (!axisTestX2 (e2[2], e2[1], fez, fey, boxHalfSize, A, B, C)) return false;
+    if (!axisTestY1 (e2[2], e2[0], fez, fex, boxHalfSize, A, B, C)) return false;
+    if (!axisTestZ12(e2[1], e2[0], fey, fex, boxHalfSize, A, B, C)) return false;
+
+
+    // 1)
+    // First tests overlap in the {x,y,z}-directions
+    // Finds min, max of the triangle each direction, and test for overlap in
+    // That direction -- this is equivalent to testing a minimal AABB around
+    // the triangle against the AABB
+    GLfloat min, max;
+    // Tests in the 3 directions
+    for (GLuint iCoord=0 ; iCoord<3 ; iCoord++)
+    {
+        minMax(A[iCoord], B[iCoord], C[iCoord], &min, &max);
+        if (min>boxHalfSize[iCoord] || max<-boxHalfSize[iCoord]) return false;
+    }
+
+    // 2)
+    // Tests if the box intersects the plane of the triangle
+    // Computes plane equation of triangle: normal*x+d=0
+    if (!planeBoxOverlap(normal, A, boxHalfSize)) return false;
+
+    return true;
+}
 
