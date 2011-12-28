@@ -283,13 +283,22 @@ void Scene::throwRay(GLfloat xMouse, GLfloat yMouse) {
     GLuint nbIndices;      // number of indices necessary to draw all the triangles
  */
     //For each object
-    for (GLuint i = 0; i</*nbDrawnObjects*/1; ++i) {
+    for (GLuint i = 0; i<nbDrawnObjects; ++i) {
+        std::cout<<"OBJECT"<<i<<std::endl;
+        GLuint * indicesData;
+        //glGetBufferSubData(GL_ARRAY_BUFFER, i, sizeof(GLuint) , indicesData);
+        GLuint * verticesData;
+        //glGetBufferSubData(GL_ARRAY_BUFFER, i, sizeof(GLuint) , verticesData);
+        std::cout<<"INDICES : "<<std::endl;
         //for each face
-        for (GLuint j = 0; j < storedObjects[i]->nbIndices ; ++j) {
-            std::cout<<j<<std::endl;
-            //std::cout<<storedObjects[i]->nbIndices<<std::endl;
-           //glGetBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, GLvoid * data);
-        }
+        /*for (GLuint j = 0; j< storedObjects[i]->nbIndices; ++j) {
+            std::cout<<indicesData[j]<<std::endl;
+        }*/
+        std::cout<<"VERTICES : "<<std::endl;
+        //for each vertices
+        /*for (GLuint j = 0; j< storedObjects[i]->nbVertices; ++j) {
+            std::cout<<verticesData[j]<<std::endl;
+        }*/
     }
 
    // intersectRayTriangle(this->camera->c, dir, normal, GLfloat * A, GLfloat * B, GLfloat * C, GLfloat * result)
