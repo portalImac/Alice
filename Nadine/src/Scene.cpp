@@ -259,10 +259,7 @@ void Scene::throwRay(GLfloat xMouse, GLfloat yMouse) {
     std::cout<<"camX : "<<this->camera->c[0]<<"camY : "<<this->camera->c[1]<<"camZ : "<<this->camera->c[2]<<std::endl;*/
 
 
-//    for (uint i = 0; i<nbDrawnObjects; ++i) {
-//        storedObjects[i];
-//        indicesVboId
-//    }
+//    for
 
     //compute vector dir
     GLfloat ray[4];
@@ -273,15 +270,33 @@ void Scene::throwRay(GLfloat xMouse, GLfloat yMouse) {
     normalize(ray);
     GLfloat * dir;
     dir = ray;
-    //normal à une facette => faire le produits vecto entre deux pts de la facettes
-    /*
-    bool intersection;
-    intersectRayTriangle(this->camera->c, dir, normal, GLfloat * A, GLfloat * B, GLfloat * C,
-    GLfloat * result)
+
+    bool intersection = false;
+/*GLuint vaoId;          // vertex array objet id
+    GLuint vboId;          // vertices buffer id
+    GLuint normalsVboId;   // normals buffer id
+    GLuint uvsVboId;       // normals buffer id
+    GLuint colorsVboId;    // normals buffer id
+    GLuint indicesVboId;   // indices buffer id
+
+    GLuint nbVertices;     // number of actual vertices
+    GLuint nbIndices;      // number of indices necessary to draw all the triangles
+ */
+    //For each object
+    for (GLuint i = 0; i</*nbDrawnObjects*/1; ++i) {
+        //for each face
+        for (GLuint j = 0; j < storedObjects[i]->nbIndices ; ++j) {
+            std::cout<<j<<std::endl;
+            //std::cout<<storedObjects[i]->nbIndices<<std::endl;
+           //glGetBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, GLvoid * data);
+        }
+    }
+
+   // intersectRayTriangle(this->camera->c, dir, normal, GLfloat * A, GLfloat * B, GLfloat * C, GLfloat * result)
     if (intersection) {
         std::cout<<"INTERSECTION"<<std::endl;
     }
-    */
+
 
 }
 
