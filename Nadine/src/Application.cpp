@@ -582,13 +582,35 @@ void Application::moveFPS()
 	multMatrixBtoMatrixA(this->scene->camera->view, rotateAroundY);
 	multMatrixBtoMatrixA(this->scene->camera->view, translate);
 
+	
+	GLfloat Tr[16];
+	GLfloat tr[3] = {0.0, 0.0, -(scene->camera->near) - 0.1} ;
+	setToTranslate(Tr, tr);
+	
+	GLfloat Sc[16];
+	GLfloat sc[3] = {0.05, 0.05, 0.0} ;
+	setToScale(Sc, sc);
+	
+	GLfloat invView[16];
+	getInverseGenericMatrix(scene->camera->view, invView);
+	
+	multMatrixBtoMatrixA(Tr, Sc);
+	multMatrixBtoMatrixA(invView, Tr);
+		
+	scene->setDrawnObjectModel(2, invView);  
+
 	for (GLuint iCoord=0 ; iCoord<3 ; iCoord++)
 	{
 		// Updates the axis with values in view
 		this->scene->camera->x[iCoord]=this->scene->camera->view[iCoord*4+0];
 		this->scene->camera->y[iCoord]=this->scene->camera->view[iCoord*4+1];
 		this->scene->camera->z[iCoord]=this->scene->camera->view[iCoord*4+2];
-		// Updates the position of the camera c
-		this->scene->camera->c[iCoord]=cameraNewPos[iCoord];
 	}
+	// Updates the position of the camera c with cub constraints
+		if ( cameraNewPos[0] > -5.0 && cameraNewPos[0] < 5.0)
+	    this->scene->camera->c[0]=cameraNewPos[0];
+	if ( cameraNewPos[2] > -5.0 && cameraNewPos[2] < 5.0)
+	    this->scene->camera->c[2]=cameraNewPos[2];
+
+
 }

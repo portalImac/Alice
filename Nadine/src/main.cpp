@@ -93,8 +93,9 @@ int main(int argc, char **argv)
 	// Light creation
 	GLfloat lightPosition[]={1.0, 1.0, 1.0, 1.0}; GLfloat lightPower=2.0;
 	scene->setLight(lightPosition, lightPower);
+	
+	//__________________________________________________________________________
 
-//__________________________________________________________________________ 
 
     // Creation of the objects to store
     std::cout<<"    Generic objects creation and storage :"<<std::endl;
@@ -102,46 +103,47 @@ int main(int argc, char **argv)
     // Définition du repère
     Object * objectAxis=new Object(GL_LINES);
     GLuint storedObjectAxisID=scene->storeObject(objectAxis);
-
-    // Définition de la sphère
-    Object * objectSphere=new Object(GL_TRIANGLES);
-    GLuint storedObjectSphereID=scene->storeObject(objectSphere);
-
-
-    //__________________________________________________________________________
     
+    // Définition du cube
+    Object * objectCube=new Object(GL_TRIANGLES);
+    GLuint storedObjectCubeID=scene->storeObject(objectCube);
+    
+    /* Environnement
+    Object * objectLaby=new Object(GL_TRIANGLES);
+    GLuint storedObjectLaby=scene->storeObject(objectLaby);
+    bool smoothObjectFlag=true;*/
+    
+    // Définition de la cible
+    Object * objectCible=new Object(GL_LINES);
+    GLuint storedObjectCibleID=scene->storeObject(objectCible);
+    
+	//__________________________________________________________________________ 
+
     // Object building
     std::cout<<"    Generic objects building :"<<std::endl;
-
-
-        //An obj house (smooth edges)
-           Object * objectHouse=new Object(GL_TRIANGLES);
-           GLuint storedObjectHouse=scene->storeObject(objectHouse);
-           bool smoothObjectFlag=true;
-           std::string fileName="../objs/house.obj";
-           buildObjectGeometryFromOBJ(objectHouse, fileName, smoothObjectFlag);
+	
     
     // Construction du repère
     buildAxis(objectAxis);
+    
+    //Construction du cube
+    buildCube(objectCube);
 
-    // Construction de la sphère
-    GLfloat radiusSphere = 0.07;
-    GLuint discLatSphere = 40;
-    GLuint discLongSphere = 40;
-    buildSphere_TrFlatRed(objectSphere, radiusSphere, discLatSphere, discLongSphere);
-
-
-     
+    /*environnement
+    std::string fileName="../objs/labyrinthe.obj";
+    buildObjectGeometryFromOBJ(objectLaby, fileName, smoothObjectFlag);*/
+    
+    // Construction de la cible
+    buildCircle(objectCible, 0.3, 20);
+    
+         
     //__________________________________________________________________________
               
     // Objects we want to see
     std::cout<<"    Objects to draw setting"<<std::endl;
 
-    //house
-    GLuint houseID=scene->addObjectToDraw(storedObjectHouse);
-    scene->setDrawnObjectShaderID(houseID, lightingShaderID);
-
-    //Texture
+    
+    /*Texture
        GLuint wHouseDiffuse;
        GLuint hHouseDiffuse;
        unsigned char * dataHouseDiffuse;
@@ -159,36 +161,33 @@ int main(int argc, char **argv)
 
        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, wHouseDiffuse, hHouseDiffuse, 0, GL_RGB, GL_UNSIGNED_BYTE, dataHouseDiffuse);
 
-       glUniform1i(glGetUniformLocation(lightingShaderID, "textureUnit0"), 0);
+       glUniform1i(glGetUniformLocation(lightingShaderID, "textureUnit0"), 0);*/
 
     //axis
     GLuint axisID=scene->addObjectToDraw(storedObjectAxisID);
     scene->setDrawnObjectShaderID(axisID, lightingShaderID);
-
-
-    //Soleil
-    GLuint indiceSoleil [125];
-
-    for (int x=0; x<5; ++x) {
-	for (int z=0; z<25; ++z) {
-		indiceSoleil [x*z+z] = scene->addObjectToDraw(storedObjectSphereID);
-		scene->setDrawnObjectShaderID(indiceSoleil[x*z+z], persoShaderID);
-		GLfloat orange[4]={0.7, 0.2, 0.2, 0.0};
-  		//scene->setDrawnObjectColor(indiceSoleil[x*z+z], orange);
-		
-    		GLfloat T[16];
-		GLfloat t[4] = {((GLfloat)x/5),
-			0.0,
-			((GLfloat)-z/5),
-			1.0
-			};
-		setToTranslate(T, t);
-
-    		scene->setDrawnObjectModel(indiceSoleil[x*z+z], T);
-	}
-    }
-
-
+    
+    //cube
+    GLfloat S[16];
+	GLfloat s[3] = {10.0, 2.0, 10.0} ;
+	setToScale(S, s);
+    GLuint cubeID=scene->addObjectToDraw(storedObjectCubeID);
+    scene->setDrawnObjectModel(cubeID, S);  
+    scene->setDrawnObjectShaderID(cubeID, lightingShaderID);
+    
+    /*environnement
+    GLuint labyID=scene->addObjectToDraw(storedObjectLaby);
+    scene->setDrawnObjectShaderID(labyID, lightingShaderID);*/
+        
+        
+    //cible
+    GLuint cibleID=scene->addObjectToDraw(storedObjectCibleID);
+    scene->setDrawnObjectShaderID(cibleID, lightingShaderID);
+        
+    
+    GLfloat blue[4]={0.0, 0.3, 0.7, 1.0};
+    scene->setDrawnObjectColor(cibleID, blue);
+       
     
     //__________________________________________________________________________
     

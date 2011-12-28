@@ -21,9 +21,7 @@ void buildLozenge(Object * object, GLfloat * vect);
 void build3DSquare(Object * object);
 void buildAxis(Object * object);
 void buildCircle(Object * object, GLfloat radius, GLuint discAngle);
-void buildDisc(Object* object, GLfloat radius, GLuint discAngle);
-void buildCylinder(Object* object, GLfloat radius, GLfloat height, GLuint discAngle, GLint discHeight, bool closed);
-void buildCone(Object* object, GLfloat radius, GLfloat height, GLuint discAngle, GLint discHeight, bool closed);
+void buildCube(Object * object);
 void buildSphere_TrFlatRed(Object* object, GLfloat radius, GLuint discLat, GLuint discLong);
 
 // Mesh conformation functions

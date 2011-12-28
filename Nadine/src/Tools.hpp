@@ -16,6 +16,8 @@
 GLfloat getNorm (GLfloat * a);
 void normalize (GLfloat * a);
 void vectorProduct (GLfloat * a, GLfloat * b, GLfloat * result);
+GLfloat dotProduct(GLfloat * a, GLfloat * b);
+GLfloat scalarTriple(GLfloat * a, GLfloat * b, GLfloat * c);
 void normalFace(GLfloat * O, GLfloat * A, GLfloat * B, GLfloat * normal, bool toNormalize);
 void setNormalsFlat(GLuint nbIndices, GLfloat * vertices, GLuint * indices, GLfloat * normals);
 
@@ -25,6 +27,7 @@ void setToScale(GLfloat * matrix, GLfloat * s);
 void setToRotate(GLfloat * matrix, GLfloat angle, GLfloat * axis);
 void setPerspective(GLfloat * mat, GLfloat l, GLfloat r, GLfloat b, GLfloat t, GLfloat n, GLfloat f);
 
+void getInverseGenericMatrix(float * A, float * B);
 void multMatrixBtoMatrixA(GLfloat * A, GLfloat * B);
 
 void printVec2(GLfloat * vect);

@@ -176,145 +176,93 @@ void buildCircle(Object * object, GLfloat radius, GLuint discAngle) {
 
 }
 
-void buildDisc(Object* object, GLfloat radius, GLuint discAngle) {
-    object->nbVertices=discAngle+1;
-    object->nbIndices=3*discAngle;
+void buildCube(Object * object)
+{
+    std::cout<<"       - cube"<<std::endl;
 
-    GLfloat deltaAngle= 2 * M_PI / (GLfloat)discAngle;
-    GLfloat vertices[4*object->nbVertices];
-    GLuint indices[object->nbIndices];
-    GLuint i;
+    object->nbVertices=4*6;
+    object->nbIndices=6*6;
 
-    GLint indexVertices = discAngle*4;
-    vertices[indexVertices+0]=0.0;
-    vertices[indexVertices+1]=0.0;
-    vertices[indexVertices+2]=0.0;
-    vertices[indexVertices+3]=1.0;
-
-    for(i=0; i<discAngle; i++) {
+    // The 3 vertices of a triangle
+    GLfloat L=1.0;
+    GLuint i=0;
+    GLfloat A[]={ L,  L,  L, 1.0}; normalize(A);
+    GLfloat B[]={ L,  L, -L, 1.0}; normalize(B);
+    GLfloat C[]={-L,  L, -L, 1.0}; normalize(C);
+    GLfloat D[]={-L,  L,  L, 1.0}; normalize(D);
+    GLfloat E[]={ L, -L,  L, 1.0}; normalize(E);
+    GLfloat F[]={ L, -L, -L, 1.0}; normalize(F);
+    GLfloat G[]={-L, -L, -L, 1.0}; normalize(G);
+    GLfloat H[]={-L, -L,  L, 1.0}; normalize(H);
+    
+    GLfloat  X[]={1.0, 0.0, 0.0};
+    GLfloat mX[]={-1.0, 0.0, 0.0};
+    GLfloat  Y[]={0.0, 1.0, 0.0};
+    GLfloat mY[]={0.0, -1.0, 0.0};
+    GLfloat  Z[]={0.0, 0.0, 1.0};
+    GLfloat mZ[]={0.0, 0.0, -1.0};
+         
+    GLuint a0=i++; GLuint a1=i++; GLuint a2=i++;
+    GLuint b0=i++; GLuint b1=i++; GLuint b2=i++;
+    GLuint c0=i++; GLuint c1=i++; GLuint c2=i++;
+    GLuint d0=i++; GLuint d1=i++; GLuint d2=i++;
+    GLuint e0=i++; GLuint e1=i++; GLuint e2=i++;
+    GLuint f0=i++; GLuint f1=i++; GLuint f2=i++;  
+    GLuint g0=i++; GLuint g1=i++; GLuint g2=i++;     
+    GLuint h0=i++; GLuint h1=i++; GLuint h2=i++;   
+    
+    
+	GLfloat vertices[]=
+	{A[0], A[1], A[2], A[3],   A[0], A[1], A[2],   A[3],A[0], A[1], A[2], A[3],
+	 B[0], B[1], B[2], B[3],   B[0], B[1], B[2],   B[3],B[0], B[1], B[2], B[3],
+	 C[0], C[1], C[2], C[3],   C[0], C[1], C[2],   C[3],C[0], C[1], C[2], C[3],
+	 D[0], D[1], D[2], D[3],   D[0], D[1], D[2],   D[3],D[0], D[1], D[2], D[3],
+	 E[0], E[1], E[2], E[3],   E[0], E[1], E[2],   E[3],E[0], E[1], E[2], E[3],
+	 F[0], F[1], F[2], F[3],   F[0], F[1], F[2],   F[3],F[0], F[1], F[2], F[3],
+	 G[0], G[1], G[2], G[3],   G[0], G[1], G[2],   G[3],G[0], G[1], G[2], G[3],
+	 H[0], H[1], H[2], H[3],   H[0], H[1], H[2],   H[3],H[0], H[1], H[2], H[3]};
+			    
+	GLfloat normals[]=
+	{Y[0], Y[1], Y[2],      X[0], X[1], X[2],      Z[0], Z[1], Z[2],     //A
+	 Y[0], Y[1], Y[2],      X[0], X[1], X[2],      mZ[0], mZ[1], mZ[2],  //B
+	 Y[0], Y[1], Y[2],      mX[0], mX[1], mX[2],   mZ[0], mZ[1], mZ[2],  //C
+	 Y[0], Y[1], Y[2],      mX[0], mX[1], mX[2],   Z[0], Z[1], Z[2],     //D
+	 mY[0], mY[1], mY[2],   X[0], X[1], X[2],      Z[0], Z[1], Z[2],     //E
+	 mY[0], mY[1], mY[2],   X[0], X[1], X[2],      mZ[0], mZ[1], mZ[2],  //F
+	 mY[0], mY[1], mY[2],   mX[0], mX[1], mX[2],   mZ[0], mZ[1], mZ[2],  //G
+	 mY[0], mY[1], mY[2],   mX[0], mX[1], mX[2],   Z[0], Z[1], Z[2] };   //H		    
 	
-	indexVertices=i*4;
-	vertices[indexVertices+0]=radius*cos(i*deltaAngle);
-	vertices[indexVertices+1]=radius*sin(i*deltaAngle);
-	vertices[indexVertices+2]=0.0;
-	vertices[indexVertices+3]=1.0;
-
-	GLint indexIndices = i*3;
-	indices[indexIndices+0]=discAngle;
-	indices[indexIndices+1]=i;
-	indices[indexIndices+2]=i+1;
-
-	if(i==(discAngle-1)) {
-		indices[indexIndices+2]=0;	
-	}
-    }
-
-    object->sendPrimitives(vertices, indices);
-}
-
-void buildCylinder(Object* object, GLfloat radius, GLfloat height, GLuint discAngle, GLint discHeight, bool closed) {
-    object->nbVertices=discAngle*(discHeight+1);
-    object->nbIndices=discAngle*discHeight*6;
-
-    GLuint i;
-    GLfloat j;
-    GLfloat deltaAngle= 2 * M_PI / (GLfloat)discAngle;
-    GLfloat deltaHeight = height/discHeight;
-    GLfloat vertices[4*object->nbVertices];
-    GLuint indices[object->nbIndices];
-
-    for(j=0; j<=discHeight; j++) {
-		
-		for(i=0; i<discAngle; i++) {
-			GLint indexVertices=j*discAngle*4 + i*4;
-
-			vertices[indexVertices+0]=radius*cos(i*deltaAngle);
-			vertices[indexVertices+1]=radius*sin(i*deltaAngle);
-			vertices[indexVertices+2]=-j*deltaHeight;
-			vertices[indexVertices+3]=1.0;
-
-			
-			if (j<discHeight) {
-				GLint indexIndices = j*discAngle*6 + i*6;
-				indices[indexIndices+0]=j*discAngle+i;
-				indices[indexIndices+1]=j*discAngle+i+1;
-				indices[indexIndices+2]=(j+1)*discAngle+i+1;
-				indices[indexIndices+3]=j*discAngle+i;
-				indices[indexIndices+4]=(j+1)*discAngle+i+1;
-				indices[indexIndices+5]=(j+1)*discAngle+i;
-
-			if (i==(discAngle-1)) {
-				indices[indexIndices+1]=j*discAngle;
-				indices[indexIndices+2]=j*discAngle+i+1;
-				indices[indexIndices+4]=j*discAngle+i+1;
-			}
-			}
-	    	}
-    }
-
-	GLfloat normals[3*object->nbVertices];
-
-	setNormalsFlat(object->nbIndices, vertices, indices, normals);
-   
-    object->sendPrimitives(vertices, indices);
-	object->sendNormals(normals);
-
-}
-
-
-void buildCone(Object* object, GLfloat radius, GLfloat height, GLuint discAngle, GLint discHeight, bool closed) {
-
-    object->nbVertices=discAngle*(discHeight+1);
-    object->nbIndices=discAngle*discHeight*6;
-
-    GLuint i;
-    GLfloat j;
-    GLfloat deltaAngle= 2 * M_PI / (GLfloat)discAngle;
-    GLfloat deltaHeight = height/discHeight;
-    GLfloat deltaRadius = radius/discHeight;
-    GLfloat vertices[4*object->nbVertices];
-    GLuint indices[object->nbIndices];
-
-    for(j=0; j<=discHeight; j++) {
-		
-		for(i=0; i<discAngle; i++) {
-			GLint indexVertices=j*discAngle*4 + i*4;
-
-			vertices[indexVertices+0]=radius*cos(i*deltaAngle);
-			vertices[indexVertices+1]=radius*sin(i*deltaAngle);
-			vertices[indexVertices+2]=-j*deltaHeight;
-			vertices[indexVertices+3]=1.0;
-
-			
-			if (j<discHeight) {
-				GLint indexIndices = j*discAngle*6 + i*6;
-				indices[indexIndices+0]=j*discAngle+i;
-				indices[indexIndices+1]=j*discAngle+i+1;
-				indices[indexIndices+2]=(j+1)*discAngle+i+1;
-				indices[indexIndices+3]=j*discAngle+i;
-				indices[indexIndices+4]=(j+1)*discAngle+i+1;
-				indices[indexIndices+5]=(j+1)*discAngle+i;
-
-			if (i==(discAngle-1)) {
-				indices[indexIndices+1]=j*discAngle;
-				indices[indexIndices+2]=j*discAngle+i+1;
-				indices[indexIndices+4]=j*discAngle+i+1;
-			}
-			}
-			
-			
-	    	}
-
-		radius-=deltaRadius;
+	for (int i=0; i<72; ++i)
+	  normals[i] *= -1.0 ; 
 	
-    }
+	
+			    
+	GLfloat uvs3[]={A[0], A[1], A[2],   A[0], A[1], A[2],   A[0], A[1], A[2],
+			        B[0], B[1], B[2],   B[0], B[1], B[2],   B[0], B[1], B[2],
+			        C[0], C[1], C[2],   C[0], C[1], C[2],   C[0], C[1], C[2],
+			        D[0], D[1], D[2],   D[0], D[1], D[2],   D[0], D[1], D[2],
+			        E[0], E[1], E[2],   E[0], E[1], E[2],   E[0], E[1], E[2],
+			        F[0], F[1], F[2],   F[0], F[1], F[2],   F[0], F[1], F[2],
+			        G[0], G[1], G[2],   G[0], G[1], G[2],   G[0], G[1], G[2],
+			        H[0], H[1], H[2],   H[0], H[1], H[2],   H[0], H[1], H[2]};
+			    
+	GLuint indices[]={ a0, c0, b0,
+				       a0, d0, c0,
+				       a1, b1, f1,
+				       a1, f1, e1,
+				       a2, e2, h2,
+				       a2, h2, d2,
+				       b2, c2, g2,
+				       b2, g2, f2,
+				       c1, d1, g1,
+				       d1, h1, g1,
+				       h0, e0, f0,
+				       h0, f0, g0};
 
-	GLfloat normals[3*object->nbVertices];
-
-	setNormalsFlat(object->nbIndices, vertices, indices, normals);
-   
+    // Sends the data into buffers on the GPU
     object->sendPrimitives(vertices, indices);
-	object->sendNormals(normals);
+    object->sendNormals(normals);
+    object->sendUvs(uvs3);
 }
 
 void buildSphere_TrFlatRed(Object* object, GLfloat radius, GLuint discLat, GLuint discLong) {
