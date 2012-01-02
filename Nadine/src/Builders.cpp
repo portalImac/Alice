@@ -609,8 +609,8 @@ bool buildObjectGeometryFromOBJ(Object * object, const std::string& fileName, bo
     object->sendPrimitives(vertices.data(), indices.data());
     if (!hasVt) 
         std::cout<<"       WARNING : Obj file "<<name<<" has no texture coordinates, add some in modeler."<<std::endl;
-//    else
-//        object->sendUvs(uvs.data());
+    else
+       object->sendUvs(uvs.data());
 
     if (!hasVn) 
     {

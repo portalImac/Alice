@@ -392,7 +392,9 @@ GLuint loadProgram(const std::vector<std::string> &files)
 
     glBindAttribLocation(programId, 0, "vertexPosition");
     glBindAttribLocation(programId, 1, "vertexNormal");
+    glBindAttribLocation(programId, 2, "vertexUvs");
     glBindAttribLocation(programId, 3, "vertexColor");
+
 
     GLuint vertexShaderId=glCreateShader(GL_VERTEX_SHADER); /// Creates a vertex shader object which id is returned
     GLuint fragmentShaderId=glCreateShader(GL_FRAGMENT_SHADER); /// Creates a fragment shader object which id is returned

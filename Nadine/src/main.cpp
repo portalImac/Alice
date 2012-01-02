@@ -79,6 +79,8 @@ int main(int argc, char **argv)
 	#endif
 	GLuint lightingShaderID=loadProgram(files); files.pop_back();
 	scene->setDefaultShaderID(lightingShaderID);
+	
+	
 	// Uniforms filling
 	glUseProgram(lightingShaderID);
 	// Material creation and to shader
@@ -93,6 +95,18 @@ int main(int argc, char **argv)
 	// Light creation
 	GLfloat lightPosition[]={1.0, 1.0, 1.0, 1.0}; GLfloat lightPower=2.0;
 	scene->setLight(lightPosition, lightPower);
+
+	// One texture and Phong shader
+	#ifdef __APPLE__
+	    files.push_back("../shaders/oldGLSL/lightingTexturingShader.glsl");
+   	 #else
+	    files.push_back("../shaders/lightingTexturingShader.glsl");
+   	 #endif
+   	 GLuint lightingTextureShaderID=loadProgram(files); files.pop_back();
+    	glUseProgram(lightingTextureShaderID);
+    	setMaterialInShader(lightingTextureShaderID, ambient, diffuse, specular, ka, kd, ks, shininess);
+    	setTextureUnitsInShader(lightingTextureShaderID);
+
 	
 	//__________________________________________________________________________
 
@@ -117,6 +131,8 @@ int main(int argc, char **argv)
     GLuint storedObjectLaby=scene->storeObject(objectLaby);
     bool smoothObjectFlag=true;
     
+    GLuint houseTextureDiffuseID=loadTexture("../textures/house_diffuse.ppm");
+    GLuint houseTextureSpecularID=loadTexture("../textures/house_spec.ppm");
     
     
 	//__________________________________________________________________________ 
@@ -135,10 +151,9 @@ int main(int argc, char **argv)
     buildCircle(objectCible, 0.3, 20);
     
 	//environnement
-    std::string fileName="../objs/labyrinthe3.obj";
+    std::string fileName="../objs/house.obj";
     buildObjectGeometryFromOBJ(objectLaby, fileName, smoothObjectFlag);
-    
-    
+  
     
          
     //__________________________________________________________________________
@@ -146,26 +161,6 @@ int main(int argc, char **argv)
     // Objects we want to see
     std::cout<<"    Objects to draw setting"<<std::endl;
 
-    
-    /*Texture
-       GLuint wHouseDiffuse;
-       GLuint hHouseDiffuse;
-       unsigned char * dataHouseDiffuse;
-
-       dataHouseDiffuse = loadPPM("../textures/house_normal.ppm", &wHouseDiffuse, &hHouseDiffuse);
-       glActiveTexture(GL_TEXTURE0);
-       GLuint textureHouseDiffuseID;
-       glGenTextures(1, &textureHouseDiffuseID);
-       glBindTexture(GL_TEXTURE_2D, textureHouseDiffuseID);
-       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-       glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, wHouseDiffuse, hHouseDiffuse, 0, GL_RGB, GL_UNSIGNED_BYTE, dataHouseDiffuse);
-
-       glUniform1i(glGetUniformLocation(lightingShaderID, "textureUnit0"), 0);*/
 
     //axis
     GLuint axisID=scene->addObjectToDraw(storedObjectAxisID);
@@ -188,7 +183,9 @@ int main(int argc, char **argv)
 	setToScale(S, s);
     GLuint labyID=scene->addObjectToDraw(storedObjectLaby);
     scene->setDrawnObjectModel(labyID, S);
-    scene->setDrawnObjectShaderID(labyID, lightingShaderID);
+    scene->setDrawnObjectShaderID(labyID, lightingTextureShaderID);
+    scene->setDrawnObjectTextureID(labyID, 0, houseTextureDiffuseID);
+    scene->setDrawnObjectTextureID(labyID, 1, houseTextureSpecularID);
         
     GLfloat blue[4]={0.0, 0.3, 0.7, 1.0};
     scene->setDrawnObjectColor(cibleID, blue);
