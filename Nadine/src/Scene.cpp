@@ -266,44 +266,75 @@ void Scene::throwRay(GLfloat xMouse, GLfloat yMouse) {
     dir = ray;
 
     bool intersection = false;
-/*GLuint vaoId;          // vertex array objet id
-    GLuint vboId;          // vertices buffer id
-    GLuint normalsVboId;   // normals buffer id
-    GLuint uvsVboId;       // normals buffer id
-    GLuint colorsVboId;    // normals buffer id
-    GLuint indicesVboId;   // indices buffer id
-
-    GLuint nbVertices;     // number of actual vertices
-    GLuint nbIndices;      // number of indices necessary to draw all the triangles
- */
-
-
-
 
     //For each object
-    for (GLuint i = 0; i < /*nbDrawnObjects*/1; ++i) {
+    for (GLuint i = 2; i < nbDrawnObjects; ++i) {
+        std::cout<<"OBJECT : "<<i<<std::endl;
 
-        std::cout<<"VERTICES : "<<std::endl;
-        //for each vertices
-        for (GLuint j = 0; j< 4/*storedObjects[i]->nbVertices*/; ++j) {
-
-        }
-
-        std::cout<<"INDICES : "<<std::endl;
         //for each face (1 face <=> 3 indices)
-       for (GLuint j = 0; j< storedObjects[i]->nbIndices; ++j) {
+        std::map<GLuint, std::vector<GLuint> >::const_iterator j;
 
+
+       //for (GLuint j = 0; j< storedObjects[i]->mapFacesIndices.size(); ++j) {
+        for (j = storedObjects[i]->mapFacesIndices.begin(); j != storedObjects[i]->mapFacesIndices.end(); ++j) {
+           //std::cout<<j<<std::endl;
+           //std::cout<<j->first<<std::endl;
+
+           std::vector<GLuint> vectIndices(3);
+           std::vector<GLuint> vectVertice(9); //contain the 3 points of the current face
+           std::vector<GLfloat> vectNormal(3);
+
+            //For an adpatation of vector<GLfloat> to a GLfloat * to work with that prototype of function (given)
+            GLfloat  A[3];
+            GLfloat  B[3];
+            GLfloat  C[3];
+            GLfloat  normal[3];
+
+
+          //get indices per face
+            std::cout<<storedObjects[i]->mapFacesIndices.find(j->first)->second[1]<<std::endl;
+//           vectIndices.push_back(storedObjects[i]->mapFacesIndices.find(j)->second[0]);
+//           vectIndices.push_back(storedObjects[i]->mapFacesIndices.find(j)->second[1]);
+//           vectIndices.push_back(storedObjects[i]->mapFacesIndices.find(j)->second[2]);
+
+//           //get each vertices per indices(3 pts) of face
+//           for (GLuint k = 0; k <vectIndices.size(); ++k) {
+//               vectVertice.push_back(storedObjects[i]->mapIndicesVertices.find(vectIndices[k])->second[0]);
+//               vectVertice.push_back(storedObjects[i]->mapIndicesVertices.find(vectIndices[k])->second[1]);
+//               vectVertice.push_back(storedObjects[i]->mapIndicesVertices.find(vectIndices[k])->second[2]);
+//           }
+//
+//           //get normal for each face
+//           vectNormal.push_back(storedObjects[i]->mapFacesNormals.find(j)->second[0]);
+//           vectNormal.push_back(storedObjects[i]->mapFacesNormals.find(j)->second[1]);
+//           vectNormal.push_back(storedObjects[i]->mapFacesNormals.find(j)->second[2]);
+//
+//           A[0] = vectVertice[0];
+//           A[1] = vectVertice[1];
+//           A[2] = vectVertice[2];
+//
+//           B[0] = vectVertice[3];
+//           B[1] = vectVertice[4];
+//           B[2] = vectVertice[5];
+//
+//           C[0] = vectVertice[6];
+//           C[1] = vectVertice[7];
+//           C[2] = vectVertice[8];
+//
+//           normal[0] = vectNormal[0];
+//           normal[1] = vectNormal[1];
+//           normal[2] = vectNormal[2];
+//
+//           //////////
+//           std::cout<<"PREMIER PT : "<<A[0]<<", "<<"DEUXIEME PT : "<<A[1]<<", "<<"TROISIEME PT : "<<A[2]<<std::endl;
+//           //////////
+
+           //intersectRayTriangle(this->camera->c, dir, normal, GLfloat * A, GLfloat * B, GLfloat * C, GLfloat * result)
+           if (intersection) {
+                std::cout<<"INTERSECTION"<<std::endl;
+           }
         }
-
-       std::cout<<"NORMALS : "<<std::endl;
-       for (GLuint j = 0; j< storedObjects[i]->nbIndices; ++j) {
-
-        }
-    }
-
-   // intersectRayTriangle(this->camera->c, dir, normal, GLfloat * A, GLfloat * B, GLfloat * C, GLfloat * result)
-    if (intersection) {
-        std::cout<<"INTERSECTION"<<std::endl;
     }
 }
+
 
