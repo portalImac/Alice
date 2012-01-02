@@ -636,12 +636,12 @@ bool buildObjectGeometryFromOBJ(Object * object, const std::string& fileName, bo
     for (i = 0; i < object->nbIndices; ++i)
     {
         std::vector<GLfloat> vectVertices(4);
-        vectVertices.push_back(vertices[i*4]);
-        vectVertices.push_back(vertices[(i*4) + 1]);
-        vectVertices.push_back(vertices[(i*4)] + 2);
-        vectVertices.push_back(vertices[(i*4)] + 3);
+        vectVertices.push_back(vertices[indices[i]*4]);
+        vectVertices.push_back(vertices[(indices[i]*4) + 1]);
+        vectVertices.push_back(vertices[(indices[i]*4)] + 2);
+        vectVertices.push_back(vertices[(indices[i]*4)] + 3);
 
-        object->mapIndicesVertices.insert(std::pair<GLuint, std::vector<GLfloat> >( indices[i], vectVertices));
+        object->mapIndicesVertices.insert(std::pair<GLuint, std::vector<GLfloat> >(indices[i], vectVertices));
 
     }
 
