@@ -628,17 +628,18 @@ bool buildObjectGeometryFromOBJ(Object * object, const std::string& fileName, bo
     }
     std::cout<<"       Material files are not taken into account by this loader."<<std::endl;
 
-    ////les trois premiers indices => positions des trois vertices dans le vect vertices
-    ////3 en 3 => une facette!
+
+
     unsigned int i = 0;
 
     //Associate each vertex to its indice
     for (i = 0; i < object->nbIndices; ++i)
     {
-        std::vector<GLfloat> vectVertices(3);
-        vectVertices.push_back(vertices[i*3]);
-        vectVertices.push_back(vertices[(i*3) + 1]);
-        vectVertices.push_back(vertices[(i*3)] + 2);
+        std::vector<GLfloat> vectVertices(4);
+        vectVertices.push_back(vertices[i*4]);
+        vectVertices.push_back(vertices[(i*4) + 1]);
+        vectVertices.push_back(vertices[(i*4)] + 2);
+        vectVertices.push_back(vertices[(i*4)] + 3);
 
         object->mapIndicesVertices.insert(std::pair<GLuint, std::vector<GLfloat> >( indices[i], vectVertices));
 
@@ -665,9 +666,6 @@ bool buildObjectGeometryFromOBJ(Object * object, const std::string& fileName, bo
     object->mapFacesNormals.insert(std::pair<GLuint, std::vector<GLfloat> >(i, vectNormals));
     }
 
-    /*Map::const_iterator itr;
-                        for(itr=occurWords.begin(); itr!= occurWords.end(); ++itr)
-                                cout << itr->second << " " << itr->first << endl;*/
     ////
     
     return true;
