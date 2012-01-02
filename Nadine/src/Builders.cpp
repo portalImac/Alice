@@ -627,6 +627,46 @@ bool buildObjectGeometryFromOBJ(Object * object, const std::string& fileName, bo
         object->sendNormals(normals.data());
     }
     std::cout<<"       Material files are not taken into account by this loader."<<std::endl;
+
+
+
+    unsigned int i = 0;
+
+    //Associate each vertex to its indice
+    for (i = 0; i < object->nbIndices; ++i)
+    {
+        std::vector<GLfloat> vectVertices(4);
+        vectVertices.push_back(vertices[indices[i]*4]);
+        vectVertices.push_back(vertices[(indices[i]*4) + 1]);
+        vectVertices.push_back(vertices[(indices[i]*4)] + 2);
+        vectVertices.push_back(vertices[(indices[i]*4)] + 3);
+
+        object->mapIndicesVertices.insert(std::pair<GLuint, std::vector<GLfloat> >(indices[i], vectVertices));
+
+    }
+
+    //Associate each indices of vertex to the face it belongs to
+    for (i = 0; i < object->nbIndices; i += 3)
+    {
+         std::vector<GLuint> vectIndices(3);
+         vectIndices.push_back(indices[i]);
+         vectIndices.push_back(indices[i + 1]);
+         vectIndices.push_back(indices[i + 2]);
+
+        object->mapFacesIndices.insert(std::pair<GLuint, std::vector<GLuint> >(i, vectIndices));
+    }
+
+    //Associate each face to its normal
+    for (i = 0; i < normals.size(); i += 3) {
+        std::vector<GLfloat> vectNormals;
+        vectNormals.push_back(normals[i]);
+        vectNormals.push_back(normals[i + 1]);
+        vectNormals.push_back(normals[i + 2]);
+
+    object->mapFacesNormals.insert(std::pair<GLuint, std::vector<GLfloat> >(i, vectNormals));
+    }
+
+    ////
     
     return true;
 }

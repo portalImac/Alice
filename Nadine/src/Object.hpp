@@ -7,7 +7,9 @@
 #define __OBJECT_HPP__
 
 #include "GLHeaders.hpp"
-
+#include <vector>
+#include <map>
+#include <iterator>
 
 // An object made of solid triangles
 class Object
@@ -42,6 +44,10 @@ class Object
         void sendUvs(GLfloat * uvs);
 
         void drawObject() const;
+
+        std::map<GLuint, std::vector<GLfloat> > mapIndicesVertices; //indice, vertices
+        std::map<GLuint, std::vector<GLuint> > mapFacesIndices; //face, indices
+        std::map<GLuint, std::vector<GLfloat> > mapFacesNormals; //face, normals
 };
 
 

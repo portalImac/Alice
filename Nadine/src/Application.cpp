@@ -366,8 +366,15 @@ void Application::handleKeyEvent(SDL_keysym& keysym, bool down)
           	
          	case SDLK_F5 :
                     std::cout<<"Key \"F5\" was pressed."<<std::endl;
-          		switchFullScreen();
+                    switchFullScreen();
                 break;
+
+                //temp for test of open a portal (without real notion of position)
+                /*case SDLK_p :
+                    std::cout<<"Key \"p\" was pressed."<<std::endl;
+                    this->scene->openPortal();
+
+                break;*/
           	    	
           	
           	default:

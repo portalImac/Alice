@@ -255,13 +255,7 @@ void Scene::drawObjectsOfScene()
 
 void Scene::throwRay(GLfloat xMouse, GLfloat yMouse) {
 
-    /*std::cout<<"EN X : "<<xMouse<<", EN Y : "<<yMouse<<std::endl;
-    std::cout<<"camX : "<<this->camera->c[0]<<"camY : "<<this->camera->c[1]<<"camZ : "<<this->camera->c[2]<<std::endl;*/
-
-
-//    for
-
-    //compute vector dir
+       //compute vector dir
     GLfloat ray[4];
     ray[0] = xMouse - this->camera->c[0];
     ray[1] = yMouse - this->camera->c[1];
@@ -282,30 +276,34 @@ void Scene::throwRay(GLfloat xMouse, GLfloat yMouse) {
     GLuint nbVertices;     // number of actual vertices
     GLuint nbIndices;      // number of indices necessary to draw all the triangles
  */
+
+
+
+
     //For each object
-    for (GLuint i = 0; i<nbDrawnObjects; ++i) {
-        std::cout<<"OBJECT"<<i<<std::endl;
-        GLuint * indicesData;
-        //glGetBufferSubData(GL_ARRAY_BUFFER, i, sizeof(GLuint) , indicesData);
-        GLuint * verticesData;
-        //glGetBufferSubData(GL_ARRAY_BUFFER, i, sizeof(GLuint) , verticesData);
-        std::cout<<"INDICES : "<<std::endl;
-        //for each face
-        /*for (GLuint j = 0; j< storedObjects[i]->nbIndices; ++j) {
-            std::cout<<indicesData[j]<<std::endl;
-        }*/
+    for (GLuint i = 0; i < /*nbDrawnObjects*/1; ++i) {
+
         std::cout<<"VERTICES : "<<std::endl;
         //for each vertices
-        /*for (GLuint j = 0; j< storedObjects[i]->nbVertices; ++j) {
-            std::cout<<verticesData[j]<<std::endl;
-        }*/
+        for (GLuint j = 0; j< 4/*storedObjects[i]->nbVertices*/; ++j) {
+
+        }
+
+        std::cout<<"INDICES : "<<std::endl;
+        //for each face (1 face <=> 3 indices)
+       for (GLuint j = 0; j< storedObjects[i]->nbIndices; ++j) {
+
+        }
+
+       std::cout<<"NORMALS : "<<std::endl;
+       for (GLuint j = 0; j< storedObjects[i]->nbIndices; ++j) {
+
+        }
     }
 
    // intersectRayTriangle(this->camera->c, dir, normal, GLfloat * A, GLfloat * B, GLfloat * C, GLfloat * result)
     if (intersection) {
         std::cout<<"INTERSECTION"<<std::endl;
     }
-
-
 }
 
