@@ -15,7 +15,7 @@
 class Object;
 
 // Building functions
-void buildTriangle(Object * object, GLfloat * colors);
+void buildTriangle(Object * object);
 void buildSquare(Object * object, GLfloat * vect);
 void buildLozenge(Object * object, GLfloat * vect);
 void build3DSquare(Object * object);
@@ -38,7 +38,7 @@ void reorderUvsAndNormalsIfSmooth(std::vector<GLfloat> * vertices, std::vector<G
 void reorderUvsAndNormalsIfNonSmooth(std::vector<GLfloat> * vertices, std::vector<GLfloat> * uvs, std::vector<GLfloat> * normals,
                                      std::vector<GLuint> * indices, std::vector<GLuint> * uvIndices, std::vector<GLuint> * normalsIndices);
 void addHomogeneousToVertices(std::vector<GLfloat> * vertices);
-bool buildObjectGeometryFromOBJ(Object * object, const std::string& fileName, bool smoothObject);
+bool buildObjectGeometryFromOBJ(Object * object, const std::string& fileName, bool smoothObject, std::vector<GLfloat> & vertices, std::vector<GLuint> & indices, std::vector<GLfloat> & normals);
 
 
 #endif
