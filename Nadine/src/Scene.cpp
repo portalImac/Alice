@@ -268,7 +268,7 @@ void Scene::throwRay(GLfloat xMouse, GLfloat yMouse) {
     bool intersection = false;
 
     //For each object
-    for (GLuint i = 2; i < nbDrawnObjects; ++i) {
+    for (GLuint i = 3; i < nbDrawnObjects; ++i) {
         //std::cout<<"OBJECT : "<<i<<std::endl;
 
         //for each face (1 face <=> 3 indices)

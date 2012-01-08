@@ -244,6 +244,8 @@ int main(int argc, char **argv)
     scene->setDrawnObjectShaderID(trID, lightingShaderID);
     GLfloat zarb[4]={0.4, 0.7, 0.2, 1.0};
     scene->setDrawnObjectColor(trID, zarb);*/
+
+        std::cout<<scene->nbStoredObjects<<std::endl;
     
     //__________________________________________________________________________
     
