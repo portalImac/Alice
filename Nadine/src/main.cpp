@@ -156,9 +156,8 @@ int main(int argc, char **argv)
     buildCircle(objectCible, 0.3, 20);
     
 	//environnement
-    std::string fileName="../objs/bloc.obj";
-    //buildObjectGeometryFromOBJ(objectLaby, fileName, smoothObjectFlag);
 
+    std::string fileName="../objs/mur.obj";
     std::vector<GLfloat> verticesObj;
     std::vector<GLuint> indicesObj;
     std::vector<GLfloat> normalsObj;
@@ -174,6 +173,7 @@ int main(int argc, char **argv)
     
     
     for (int i=0; i<application->nbTriangles; ++i)
+
 	{
       application->objVertices[12*i] = verticesObj[4*indicesObj[3*i]];
 	  application->objVertices[12*i+1] = verticesObj[4*indicesObj[3*i]+1];
