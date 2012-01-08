@@ -131,8 +131,8 @@ int main(int argc, char **argv)
     GLuint storedObjectLaby=scene->storeObject(objectLaby);
     bool smoothObjectFlag=true;
     
-    GLuint houseTextureDiffuseID=loadTexture("../textures/house_diffuse.ppm");
-    GLuint houseTextureSpecularID=loadTexture("../textures/house_spec.ppm");
+    GLuint houseTextureDiffuseID=loadTexture("../textures/texture.ppm");
+    GLuint houseTextureSpecularID=loadTexture("../textures/texture.ppm");
     
     
 	//__________________________________________________________________________ 
@@ -151,7 +151,7 @@ int main(int argc, char **argv)
     buildCircle(objectCible, 0.3, 20);
     
 	//environnement
-    std::string fileName="../objs/house.obj";
+    std::string fileName="../objs/bloc.obj";
     buildObjectGeometryFromOBJ(objectLaby, fileName, smoothObjectFlag);
   
     

@@ -684,11 +684,13 @@ bool buildObjectGeometryFromOBJ(Object * object, const std::string& fileName, bo
     object->mapFacesNormals.insert(std::pair<GLuint, std::vector<GLfloat> >(idxMap, vectNormals));
     }
 
-    std::map<GLuint, std::vector<GLuint> >::const_iterator itr;
-
-//    for (itr = object->mapFacesIndices.begin(); itr != object->mapFacesIndices.end(); ++itr) {
+//    std::map<GLuint, std::vector<GLfloat> >::const_iterator itr;
+//
+//    for (itr = object->mapIndicesVertices.begin(); itr != object->mapIndicesVertices.end(); ++itr) {
 //        std::cout<<itr->first<<std::endl;
 //        std::cout<<itr->second[0]<<std::endl;
+//        std::cout<<itr->second[1]<<std::endl;
+//        std::cout<<itr->second[2]<<std::endl;
 //    }
 
     ////
