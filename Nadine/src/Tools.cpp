@@ -119,13 +119,44 @@ void getInverseGenericMatrix(float * A, float * B)
 	    B[i]=B[i]/det;
 }
 
-void multVertexWithMatrix(GLfloat * vertex, GLfloat * matrix, GLfloat * result)
+void multVertexWithMatrix(GLfloat * vertex, GLfloat * matrix, GLfloat * result, GLuint dim)
 {
-	result[0] = vertex[0]*matrix[0] + vertex[1]*matrix[4] + vertex[2]*matrix[8] + vertex[3]*matrix[12];
-	result[1] = vertex[0]*matrix[1] + vertex[1]*matrix[5] + vertex[2]*matrix[9] + vertex[3]*matrix[13];
-	result[2] = vertex[0]*matrix[2] + vertex[1]*matrix[6] + vertex[2]*matrix[10] + vertex[3]*matrix[14];
-	result[3] = vertex[0]*matrix[3] + vertex[1]*matrix[7] + vertex[2]*matrix[11] + vertex[3]*matrix[15];
+	if (dim==4)
+	{
+		result[0] = vertex[0]*matrix[0] + vertex[1]*matrix[4] + vertex[2]*matrix[8] + vertex[3]*matrix[12];
+		result[1] = vertex[0]*matrix[1] + vertex[1]*matrix[5] + vertex[2]*matrix[9] + vertex[3]*matrix[13];
+		result[2] = vertex[0]*matrix[2] + vertex[1]*matrix[6] + vertex[2]*matrix[10] + vertex[3]*matrix[14];
+		result[3] = vertex[0]*matrix[3] + vertex[1]*matrix[7] + vertex[2]*matrix[11] + vertex[3]*matrix[15];
+	}
+	else
+	{
+		result[0] = vertex[0]*matrix[0] + vertex[1]*matrix[4] + vertex[2]*matrix[8];
+		result[1] = vertex[0]*matrix[1] + vertex[1]*matrix[5] + vertex[2]*matrix[9];
+		result[2] = vertex[0]*matrix[2] + vertex[1]*matrix[6] + vertex[2]*matrix[10];
+	}
+	
 }
+
+
+
+
+/*
+ * if (dim == 4)
+	{
+		GLfloat init[4] = {vertex[0], vertex[1], vertex[2], vertex[3]} ;
+		vertex[0] = matrix[0]*init[0] + matrix[1]*init[1] + matrix[2]*init[2] + matrix[3]*init[3];
+		vertex[1] = matrix[4]*init[0] + matrix[5]*init[1] + matrix[6]*init[2] + matrix[7]*init[3];
+		vertex[2] = matrix[8]*init[0] + matrix[9]*init[1] + matrix[10]*init[2] + matrix[11]*init[3];
+		vertex[3] = matrix[12]*init[0] + matrix[13]*init[1] + matrix[14]*init[2] + matrix[15]*init[3];
+	}
+	else
+	{
+		GLfloat init[3] = {vertex[0], vertex[1], vertex[2]} ;
+		vertex[0] = matrix[0]*init[0] + matrix[1]*init[1] + matrix[2]*init[2];
+		vertex[1] = matrix[4]*init[0] + matrix[5]*init[1] + matrix[6]*init[2];
+		vertex[2] = matrix[8]*init[0] + matrix[9]*init[1] + matrix[10]*init[2];
+	}
+	*/
 
 // Does the multiplication A=A*B : all the matrices are described column-major
 void multMatrixBtoMatrixA(GLfloat * A, GLfloat * B)

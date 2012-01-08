@@ -606,6 +606,7 @@ void Application::moveFPS()
 	for (int i=0; i<16; ++i)
 		mHeros[i] = invView[i];
 		
+			
 	GLfloat xHeros[3] = {mHeros[0],mHeros[1],mHeros[2]};
 	GLfloat yHeros[3] = {0,1,0};
 	GLfloat zHeros[3] = {mHeros[8],mHeros[9],mHeros[10]};
@@ -617,8 +618,8 @@ void Application::moveFPS()
 	mHeros[4] = yHeros[0]; mHeros[5] = yHeros[1]; mHeros[6] = yHeros[2];
 	mHeros[8] = zHeros[0]; mHeros[9] = zHeros[1]; mHeros[10] = zHeros[2];
 	
-	//this->boxHalfSize[0] = mHeros[0] / 2.0; this->boxHalfSize[1] = mHeros[5] / 2.0; this->boxHalfSize[2] = mHeros[10] / 2.0;
-	this->boxHalfSize[0] = 0.1; this->boxHalfSize[1] = 0.1; this->boxHalfSize[2] = 0.1;
+	this->boxHalfSize[0] = mHeros[0] / 2.0; this->boxHalfSize[1] = mHeros[5] / 2.0; this->boxHalfSize[2] = mHeros[10] / 2.0;
+	//this->boxHalfSize[0] = 0.2; this->boxHalfSize[1] = 0.0; this->boxHalfSize[2] = 0.2;
 	
 	
 	//position de la cible
@@ -667,39 +668,39 @@ void Application::moveFPS()
 	{
 		GLfloat A[3];
 		A[0] = objVertices[12*i]; A[1] = objVertices[12*i+1]; A[2] = objVertices[12*i+2]; A[3] = 1.0;
-		multVertexWithMatrix(A, mHeros, A);
+		multVertexWithMatrix(A, invTransfoMatrix, A, 4);
 		
 		GLfloat B[3];
 		B[0] = objVertices[12*i+4]; B[1] = objVertices[12*i+5]; B[2] = objVertices[12*i+6]; B[3] = 1.0;
-		multVertexWithMatrix(B, mHeros, B);
+		multVertexWithMatrix(B, invTransfoMatrix, B, 4);
 		
 		GLfloat C[3];
-		C[0] = objVertices[12*i+8]; C[1] = objVertices[12*i+9]; C[2] = objVertices[12*i+10]; C[3] = 1.0;
-		multVertexWithMatrix(C, mHeros, C);
+		C[0] = objVertices[12*i+8]; C[1] = 2*objVertices[12*i+9]; C[2] = objVertices[12*i+10]; C[3] = 1.0;
+		multVertexWithMatrix(C, invTransfoMatrix, C, 4);
 		
 		GLfloat AB[3] = {B[0]-A[0], B[1]-A[1], B[2]-A[2]};
 		GLfloat AC[3] = {C[0]-A[0], C[1]-A[1], C[2]-A[2]};
 		GLfloat normal[3];
 		vectorProduct(AB, AC, normal);
+		multVertexWithMatrix(normal, invTransfoMatrix, normal, 3);
 		normalize(normal);
 		//normal[2] = fabs(normal[2]);
 		//std::cout<< normal[0] << " " <<normal[1] << " " << normal[2] << std::endl;
-		
+				
 		intersect = intersectAABBTriangle(boxHalfSize, normal, A, B, C);
 						
 		if (intersect)
 			break;
+					
 	}
 	
-	
+	//std::cout << intersect << std::endl;
+		
 	if (!intersect)
 	{
 		this->scene->camera->c[0]=cameraNewPos[0];
 		this->scene->camera->c[2]=cameraNewPos[2];
 	}
-	
-	
-	
-	
+		
 
 }

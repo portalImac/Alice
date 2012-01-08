@@ -598,11 +598,18 @@ bool buildObjectGeometryFromOBJ(Object * object, const std::string& fileName, bo
     object->nbVertices=vertices.size()/4;
     object->nbIndices=indices.size();
     
+       
     // Normalizes to 1.0 the size of the mesh and centers it
     centerAndNormalizeMesh(object, vertices.data());
 
-
-    object->sendPrimitives(vertices.data(), indices.data());
+	for (int i=0; i<vertices.size()/4; ++i)
+	{
+		vertices[4*i] *= 4;
+		vertices[4*i+1] *= 2;
+		vertices[4*i+2] *= 4;
+	}
+	
+	object->sendPrimitives(vertices.data(), indices.data());
     if (!hasVt) 
         std::cout<<"       WARNING : Obj file "<<name<<" has no texture coordinates, add some in modeler."<<std::endl;
     else

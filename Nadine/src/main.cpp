@@ -38,7 +38,7 @@ int main(int argc, char **argv)
 
     // Camera position and orientation
     std::cout<<"    Camera settings"<<std::endl;
-    scene->camera->c[2]=1.5; // Position of the camera
+    scene->camera->c[2]=4.0; // Position of the camera
     scene->camera->c[1]=0.0; // Position of the camera
     scene->camera->c[0]=0.0; // Position of the camera
     scene->camera->updateView();
@@ -174,22 +174,38 @@ int main(int argc, char **argv)
     
     
     for (int i=0; i<application->nbTriangles; ++i)
-        {
-              application->objVertices[12*i] = verticesObj[indicesObj[3*i]];
-              application->objVertices[12*i+1] = verticesObj[indicesObj[3*i]+1];
-              application->objVertices[12*i+2] = verticesObj[indicesObj[3*i]+2];
-              application->objVertices[12*i+3] = 1.0;
-              application->objVertices[12*i+4] = verticesObj[indicesObj[3*i+1]];
-              application->objVertices[12*i+5] = verticesObj[indicesObj[3*i+1]+1];
-              application->objVertices[12*i+6] = verticesObj[indicesObj[3*i+1]+2];
-              application->objVertices[12*i+7] = 1.0;
-              application->objVertices[12*i+8] = verticesObj[indicesObj[3*i+2]];
-              application->objVertices[12*i+9] = verticesObj[indicesObj[3*i+2]+1];
-              application->objVertices[12*i+10] = verticesObj[indicesObj[3*i+2]+2];
-              application->objVertices[12*i+11] = 1.0;
+	{
+      application->objVertices[12*i] = verticesObj[4*indicesObj[3*i]];
+	  application->objVertices[12*i+1] = verticesObj[4*indicesObj[3*i]+1];
+	  application->objVertices[12*i+2] = verticesObj[4*indicesObj[3*i]+2];
+	  application->objVertices[12*i+3] = verticesObj[4*indicesObj[3*i]+3];
+	  
+	  application->objVertices[12*i+4] = verticesObj[4*indicesObj[3*i+1]];
+	  application->objVertices[12*i+5] = verticesObj[4*indicesObj[3*i+1]+1];
+	  application->objVertices[12*i+6] = verticesObj[4*indicesObj[3*i+1]+2];
+	  application->objVertices[12*i+7] = verticesObj[4*indicesObj[3*i+1]+3];
+	  
+	  application->objVertices[12*i+8] = verticesObj[4*indicesObj[3*i+2]];
+	  application->objVertices[12*i+9] = verticesObj[4*indicesObj[3*i+2]+1];
+	  application->objVertices[12*i+10] = verticesObj[4*indicesObj[3*i+2]+2];
+	  application->objVertices[12*i+11] = verticesObj[4*indicesObj[3*i+2]+3];
 	}
+	
+	std::cout << indicesObj[3] << " " << indicesObj[4] << indicesObj[5] << std::endl;
+	
+	std::cout << verticesObj[11*4] << " " << verticesObj[11*4+1] << " " << verticesObj[11*4+2] << " " << verticesObj[11*4+3] << std::endl;
+	std::cout << verticesObj[10*4] << " " << verticesObj[10*4+1] << " " << verticesObj[10*4+2] << " " << verticesObj[10*4+3] << std::endl;
+	std::cout << verticesObj[4] << " " << verticesObj[4+1] << " " << verticesObj[4+2] << " " << verticesObj[4+3] << std::endl << std::endl;
+	
+	std::cout << verticesObj[4] << " " << verticesObj[4+1] << " " << verticesObj[4+2] << " " << verticesObj[4+3] << std::endl;
+	std::cout << verticesObj[0] << " " << verticesObj[1] << " " << verticesObj[2] << " " << verticesObj[3] << std::endl;
+	std::cout << verticesObj[11*4] << " " << verticesObj[11*4+1] << " " << verticesObj[11*4+2] << " " << verticesObj[11*4+3] << std::endl << std::endl;
+	
+	for (int i=0; i<24; ++i)
+		std::cout << application->objVertices[i] << " " ;
 	    
-          
+    std::cout << std::endl;      
+    
     //__________________________________________________________________________
               
     // Objects we want to see
@@ -220,9 +236,9 @@ int main(int argc, char **argv)
 	setToScale(S, s);
 		
     GLuint labyID=scene->addObjectToDraw(storedObjectLaby);
-    scene->setDrawnObjectModel(labyID, S);
+    //scene->setDrawnObjectModel(labyID, S);
     scene->setDrawnObjectColor(labyID, red);
-  
+	scene->setDrawnObjectShaderID(labyID, lightingShaderID);
 	/*cible
     GLuint trID=scene->addObjectToDraw(storedObjectTrID);
     scene->setDrawnObjectShaderID(trID, lightingShaderID);
