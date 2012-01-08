@@ -119,7 +119,13 @@ void getInverseGenericMatrix(float * A, float * B)
 	    B[i]=B[i]/det;
 }
 
-
+void multVertexWithMatrix(GLfloat * vertex, GLfloat * matrix, GLfloat * result)
+{
+	result[0] = vertex[0]*matrix[0] + vertex[1]*matrix[4] + vertex[2]*matrix[8] + vertex[3]*matrix[12];
+	result[1] = vertex[0]*matrix[1] + vertex[1]*matrix[5] + vertex[2]*matrix[9] + vertex[3]*matrix[13];
+	result[2] = vertex[0]*matrix[2] + vertex[1]*matrix[6] + vertex[2]*matrix[10] + vertex[3]*matrix[14];
+	result[3] = vertex[0]*matrix[3] + vertex[1]*matrix[7] + vertex[2]*matrix[11] + vertex[3]*matrix[15];
+}
 
 // Does the multiplication A=A*B : all the matrices are described column-major
 void multMatrixBtoMatrixA(GLfloat * A, GLfloat * B)

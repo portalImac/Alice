@@ -19,7 +19,7 @@
 
 
 // Builds one triangle
-void buildTriangle(Object * object, GLfloat * colors)
+void buildTriangle(Object * object)
 {
     object->nbVertices=3;
     object->nbIndices=3;
@@ -27,7 +27,7 @@ void buildTriangle(Object * object, GLfloat * colors)
     // The 3 vertices of a triangle
 	GLfloat vertices[]={-0.5, 0.0, 0.0, 1.0, 
 	                     0.5, 0.0, 0.0, 1.0,
-	                     0.0, 0.5, 0.0, 1.0};
+	                     0, 0.5, 0.0, 1.0};
 
     // The 3 indices of the vertices to draw the face
     GLuint indices[]={0, 1, 2};
@@ -35,7 +35,6 @@ void buildTriangle(Object * object, GLfloat * colors)
     // Sends the data into buffers on the GPU
     object->sendPrimitives(vertices, indices);
 
-    object->sendColors(colors);
 }
 
 
@@ -184,7 +183,7 @@ void buildCube(Object * object)
     object->nbIndices=6*6;
 
     // The 3 vertices of a triangle
-    GLfloat L=1.0;
+    GLfloat L=1;
     GLuint i=0;
     GLfloat A[]={ L,  L,  L, 1.0}; normalize(A);
     GLfloat B[]={ L,  L, -L, 1.0}; normalize(B);
@@ -534,8 +533,7 @@ void conformToObject(std::vector<GLfloat> * vertices, std::vector<GLfloat> * uvs
 }
 
 
-// Builds an object made from an OBJ file, taking only geometry into account (not materials)
-bool buildObjectGeometryFromOBJ(Object * object, const std::string& fileName, bool smoothObject)
+bool buildObjectGeometryFromOBJ(Object * object, const std::string& fileName, bool smoothObject, std::vector<GLfloat> & vertices, std::vector<GLuint> & indices, std::vector<GLfloat> & normals)
 {
     std::ifstream file(fileName.c_str(), std::ios_base::in);
     if(!file)
@@ -547,10 +545,8 @@ bool buildObjectGeometryFromOBJ(Object * object, const std::string& fileName, bo
 
     bool hasVt=false;
     bool hasVn=false;
-	std::vector<GLfloat> vertices;
+	
     std::vector<GLfloat> uvs;
-    std::vector<GLfloat> normals;
-    std::vector<GLuint> indices;
     std::vector<GLuint> uvIndices;
     std::vector<GLuint> normalIndices;
     std::string buf, key, name, MTLFileName;
@@ -654,6 +650,7 @@ bool buildObjectGeometryFromOBJ(Object * object, const std::string& fileName, bo
 
         object->mapIndicesVertices.insert(std::pair<GLuint, std::vector<GLfloat> >(indices[i], vectVertices));
 
+			
     }
 
 //WORKS//
@@ -670,6 +667,7 @@ bool buildObjectGeometryFromOBJ(Object * object, const std::string& fileName, bo
         vectIndices.push_back(indices[i+2]);
 
         object->mapFacesIndices.insert(std::pair<GLuint, std::vector<GLuint> >(idxMap, vectIndices));
+
     }
 
 

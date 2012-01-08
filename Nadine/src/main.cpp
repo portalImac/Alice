@@ -14,6 +14,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <cmath>
 
 // Entry point in the program
 int main(int argc, char **argv)
@@ -37,7 +38,7 @@ int main(int argc, char **argv)
 
     // Camera position and orientation
     std::cout<<"    Camera settings"<<std::endl;
-    scene->camera->c[2]=1.0; // Position of the camera
+    scene->camera->c[2]=1.5; // Position of the camera
     scene->camera->c[1]=0.0; // Position of the camera
     scene->camera->c[0]=0.0; // Position of the camera
     scene->camera->updateView();
@@ -118,9 +119,10 @@ int main(int argc, char **argv)
     Object * objectAxis=new Object(GL_LINES);
     GLuint storedObjectAxisID=scene->storeObject(objectAxis);
     
-    /* Définition boundingBox
+    
+    // Définition boundingBox
     Object * objectBB=new Object(GL_TRIANGLES);
-    GLuint storedObjectBBID=scene->storeObject(objectBB);*/
+    GLuint storedObjectBBID=scene->storeObject(objectBB);
     
     // Définition de la cible
     Object * objectCible=new Object(GL_LINES);
@@ -130,10 +132,13 @@ int main(int argc, char **argv)
     Object * objectLaby=new Object(GL_TRIANGLES);
     GLuint storedObjectLaby=scene->storeObject(objectLaby);
     bool smoothObjectFlag=true;
-    
+
     GLuint houseTextureDiffuseID=loadTexture("../textures/texture.ppm");
     GLuint houseTextureSpecularID=loadTexture("../textures/texture.ppm");
-    
+
+    /*Object * objectTr=new Object(GL_TRIANGLES);
+    GLuint storedObjectTrID=scene->storeObject(objectTr);*/
+        
     
 	//__________________________________________________________________________ 
 
@@ -144,18 +149,47 @@ int main(int argc, char **argv)
     // Construction du repère
     buildAxis(objectAxis);
     
-    /*Construction boundingBox
-    buildCube(objectBB);*/
+    //Construction boundingBox
+    //buildCube(objectBB);
 
 	// Construction de la cible
     buildCircle(objectCible, 0.3, 20);
     
 	//environnement
     std::string fileName="../objs/bloc.obj";
-    buildObjectGeometryFromOBJ(objectLaby, fileName, smoothObjectFlag);
+    //buildObjectGeometryFromOBJ(objectLaby, fileName, smoothObjectFlag);
+
+    std::vector<GLfloat> verticesObj;
+    std::vector<GLuint> indicesObj;
+    std::vector<GLfloat> normalsObj;
+    buildObjectGeometryFromOBJ(objectLaby, fileName, smoothObjectFlag, verticesObj, indicesObj, normalsObj);
   
+    application->nbTriangles = indicesObj.size() / 3;
+    application->nbVertices = verticesObj.size() / 4;
     
-         
+    application->objVertices = new GLfloat[application->nbTriangles * 12];
+    application->objIndices = new GLuint[indicesObj.size()];
+    application->objNormals = new GLfloat[application->nbTriangles * 3];
+    
+    
+    
+    for (int i=0; i<application->nbTriangles; ++i)
+        {
+              application->objVertices[12*i] = verticesObj[indicesObj[3*i]];
+              application->objVertices[12*i+1] = verticesObj[indicesObj[3*i]+1];
+              application->objVertices[12*i+2] = verticesObj[indicesObj[3*i]+2];
+              application->objVertices[12*i+3] = 1.0;
+              application->objVertices[12*i+4] = verticesObj[indicesObj[3*i+1]];
+              application->objVertices[12*i+5] = verticesObj[indicesObj[3*i+1]+1];
+              application->objVertices[12*i+6] = verticesObj[indicesObj[3*i+1]+2];
+              application->objVertices[12*i+7] = 1.0;
+              application->objVertices[12*i+8] = verticesObj[indicesObj[3*i+2]];
+              application->objVertices[12*i+9] = verticesObj[indicesObj[3*i+2]+1];
+              application->objVertices[12*i+10] = verticesObj[indicesObj[3*i+2]+2];
+              application->objVertices[12*i+11] = 1.0;
+	}
+	    
+          
     //__________________________________________________________________________
               
     // Objects we want to see
@@ -166,30 +200,34 @@ int main(int argc, char **argv)
     GLuint axisID=scene->addObjectToDraw(storedObjectAxisID);
     scene->setDrawnObjectShaderID(axisID, lightingShaderID);
     
-    /*BoundingBox
+    //BoundingBox
     GLuint BBID=scene->addObjectToDraw(storedObjectBBID);
-    scene->setDrawnObjectShaderID(BBID, lightingShaderID);
+    //scene->setDrawnObjectShaderID(BBID, lightingShaderID);
     
     GLfloat yellow[4]={0.0, 0.8, 0.4, 1.0};
-    scene->setDrawnObjectColor(BBID, yellow);*/
+    scene->setDrawnObjectColor(BBID, yellow);
     
+        
     //cible
     GLuint cibleID=scene->addObjectToDraw(storedObjectCibleID);
     scene->setDrawnObjectShaderID(cibleID, lightingShaderID);
+    GLfloat blue[4]={0.0, 0.3, 0.7, 1.0};
+    scene->setDrawnObjectColor(cibleID, blue);
     
     //environnement
     GLfloat S[16];
 	GLfloat s[3] = {3.0, 2.0, 3.0} ;
 	setToScale(S, s);
+		
     GLuint labyID=scene->addObjectToDraw(storedObjectLaby);
     scene->setDrawnObjectModel(labyID, S);
-    scene->setDrawnObjectShaderID(labyID, lightingTextureShaderID);
-    scene->setDrawnObjectTextureID(labyID, 0, houseTextureDiffuseID);
-    scene->setDrawnObjectTextureID(labyID, 1, houseTextureSpecularID);
-        
-    GLfloat blue[4]={0.0, 0.3, 0.7, 1.0};
-    scene->setDrawnObjectColor(cibleID, blue);
-       
+    scene->setDrawnObjectColor(labyID, red);
+  
+	/*cible
+    GLuint trID=scene->addObjectToDraw(storedObjectTrID);
+    scene->setDrawnObjectShaderID(trID, lightingShaderID);
+    GLfloat zarb[4]={0.4, 0.7, 0.2, 1.0};
+    scene->setDrawnObjectColor(trID, zarb);*/
     
     //__________________________________________________________________________
     

@@ -40,7 +40,7 @@ class Object
 
         void sendPrimitives(GLfloat * vertices, GLuint * indices);
         void sendColors(GLfloat * colors);
-	void sendNormals(GLfloat * normals);
+		void sendNormals(GLfloat * normals);
         void sendUvs(GLfloat * uvs);
 
         void drawObject() const;
