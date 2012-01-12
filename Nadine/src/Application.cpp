@@ -77,11 +77,14 @@ void Application::init(unsigned int width, unsigned int height)
 
 	this->scroll=0;
 	
+		
 	// Initialisation of SDL and creation of OpenGL context
     initSDLOpenGL();
     
     // Customize a few OpenGL and SDL states (after context creation)
     customizeStates();
+    
+    
 }
 
 
@@ -534,9 +537,13 @@ void Application::loop()
 
 void Application::animate()
 {
-
 	this->cntAnimation++;
 }
+	
+	
+	
+	
+
 
 // Moves with a FPS camera
 void Application::moveFPS()
@@ -594,30 +601,29 @@ void Application::moveFPS()
 	GLfloat invView[16];
 	getInverseGenericMatrix(scene->camera->view, invView);
 	
-	/*
+	
 	GLfloat mHeros[16];
 	for (int i=0; i<16; ++i)
 		mHeros[i] = invView[i];
 		
 			
-	GLfloat THeros[16];
-	GLfloat tHeros[3] = {0.0, 0.0, -(scene->camera->near) - 0.2 } ;
-	setToTranslate(THeros, tHeros);
-		
-	GLfloat SHeros[16];
-	GLfloat sHeros[3] = {0.03, 0.08, 0.03} ;
-	setToScale(SHeros, sHeros);
+	GLfloat xHeros[3] = {mHeros[0],mHeros[1],mHeros[2]};
+	GLfloat yHeros[3] = {0,1,0};
+	GLfloat zHeros[3] = {mHeros[8],mHeros[9],mHeros[10]};
 	
-	multMatrixBtoMatrixA(THeros, SHeros);
-	multMatrixBtoMatrixA(mHeros, THeros);
+	vectorProduct (xHeros, yHeros, zHeros);
+	vectorProduct (yHeros, zHeros, xHeros);
 	
-	scene->setDrawnObjectModel(1, mHeros); */ 
+	mHeros[0] = xHeros[0]; mHeros[1] = xHeros[1]; mHeros[2] = xHeros[2];
+	mHeros[4] = yHeros[0]; mHeros[5] = yHeros[1]; mHeros[6] = yHeros[2];
+	mHeros[8] = zHeros[0]; mHeros[9] = zHeros[1]; mHeros[10] = zHeros[2];
+	
+	this->boxHalfSize[0] = mHeros[0] / 2.0; this->boxHalfSize[1] = mHeros[5] / 2.0; this->boxHalfSize[2] = mHeros[10] / 2.0;
+	//this->boxHalfSize[0] = 0.2; this->boxHalfSize[1] = 0.0; this->boxHalfSize[2] = 0.2;
 	
 	
 	//position de la cible
-	
-	
-	
+		
 	GLfloat TCible[16];
 	GLfloat tCible[3] = {0.0, 0.0, -(scene->camera->near) - 0.1} ;
 	setToTranslate(TCible, tCible);
@@ -629,7 +635,9 @@ void Application::moveFPS()
 	multMatrixBtoMatrixA(TCible, SCible);
 	multMatrixBtoMatrixA(invView, TCible);
 		
-	scene->setDrawnObjectModel(1, invView);  
+	scene->setDrawnObjectModel(2, invView);  
+
+
 
 	for (GLuint iCoord=0 ; iCoord<3 ; iCoord++)
 	{
@@ -639,12 +647,60 @@ void Application::moveFPS()
 		this->scene->camera->z[iCoord]=this->scene->camera->view[iCoord*4+2];
 	}
 	
+	bool intersect = false;
 	
-	// Updates the position of the camera c with cub constraints
-		if ( cameraNewPos[0] > -5.0 && cameraNewPos[0] < 5.0)
-	    this->scene->camera->c[0]=cameraNewPos[0];
-	if ( cameraNewPos[2] > -5.0 && cameraNewPos[2] < 5.0)
-	    this->scene->camera->c[2]=cameraNewPos[2];
-
+	/*GLfloat A[4] = {-0.5, 0.0, 0.0, 1.0};
+	multVertexWithMatrix(A, mHeros, A);
+	GLfloat B[4] = {0.5, 0.0, 0.0, 1.0};
+	multVertexWithMatrix(B, mHeros, B);
+	GLfloat C[4] = {0.0, 0.5, 0.0, 1.0};
+	multVertexWithMatrix(C, mHeros, C);
+	GLfloat norms[3] = {0.0, 0.0, 1.0};
+	
+	intersect = intersectAABBTriangle(boxHalfSize, norms, A, B, C);*/
+	
+	
+	GLfloat invTransfoMatrix[16];
+	getInverseGenericMatrix(mHeros, invTransfoMatrix);
+	
+		
+	for (int i=0; i< nbTriangles ; ++i)
+	{
+		GLfloat A[3];
+		A[0] = objVertices[12*i]; A[1] = objVertices[12*i+1]; A[2] = objVertices[12*i+2]; A[3] = 1.0;
+		multVertexWithMatrix(A, invTransfoMatrix, A, 4);
+		
+		GLfloat B[3];
+		B[0] = objVertices[12*i+4]; B[1] = objVertices[12*i+5]; B[2] = objVertices[12*i+6]; B[3] = 1.0;
+		multVertexWithMatrix(B, invTransfoMatrix, B, 4);
+		
+		GLfloat C[3];
+		C[0] = objVertices[12*i+8]; C[1] = 2*objVertices[12*i+9]; C[2] = objVertices[12*i+10]; C[3] = 1.0;
+		multVertexWithMatrix(C, invTransfoMatrix, C, 4);
+		
+		GLfloat AB[3] = {B[0]-A[0], B[1]-A[1], B[2]-A[2]};
+		GLfloat AC[3] = {C[0]-A[0], C[1]-A[1], C[2]-A[2]};
+		GLfloat normal[3];
+		vectorProduct(AB, AC, normal);
+		multVertexWithMatrix(normal, invTransfoMatrix, normal, 3);
+		normalize(normal);
+		//normal[2] = fabs(normal[2]);
+		//std::cout<< normal[0] << " " <<normal[1] << " " << normal[2] << std::endl;
+				
+		intersect = intersectAABBTriangle(boxHalfSize, normal, A, B, C);
+						
+		if (intersect)
+			break;
+					
+	}
+	
+	//std::cout << intersect << std::endl;
+		
+	if (!intersect)
+	{
+		this->scene->camera->c[0]=cameraNewPos[0];
+		this->scene->camera->c[2]=cameraNewPos[2];
+	}
+		
 
 }

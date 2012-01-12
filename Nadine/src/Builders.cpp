@@ -19,7 +19,7 @@
 
 
 // Builds one triangle
-void buildTriangle(Object * object, GLfloat * colors)
+void buildTriangle(Object * object)
 {
     object->nbVertices=3;
     object->nbIndices=3;
@@ -27,7 +27,7 @@ void buildTriangle(Object * object, GLfloat * colors)
     // The 3 vertices of a triangle
 	GLfloat vertices[]={-0.5, 0.0, 0.0, 1.0, 
 	                     0.5, 0.0, 0.0, 1.0,
-	                     0.0, 0.5, 0.0, 1.0};
+	                     0, 0.5, 0.0, 1.0};
 
     // The 3 indices of the vertices to draw the face
     GLuint indices[]={0, 1, 2};
@@ -35,7 +35,6 @@ void buildTriangle(Object * object, GLfloat * colors)
     // Sends the data into buffers on the GPU
     object->sendPrimitives(vertices, indices);
 
-    object->sendColors(colors);
 }
 
 
@@ -184,7 +183,7 @@ void buildCube(Object * object)
     object->nbIndices=6*6;
 
     // The 3 vertices of a triangle
-    GLfloat L=1.0;
+    GLfloat L=1;
     GLuint i=0;
     GLfloat A[]={ L,  L,  L, 1.0}; normalize(A);
     GLfloat B[]={ L,  L, -L, 1.0}; normalize(B);
@@ -534,8 +533,7 @@ void conformToObject(std::vector<GLfloat> * vertices, std::vector<GLfloat> * uvs
 }
 
 
-// Builds an object made from an OBJ file, taking only geometry into account (not materials)
-bool buildObjectGeometryFromOBJ(Object * object, const std::string& fileName, bool smoothObject)
+bool buildObjectGeometryFromOBJ(Object * object, const std::string& fileName, bool smoothObject, std::vector<GLfloat> & vertices, std::vector<GLuint> & indices, std::vector<GLfloat> & normals)
 {
     std::ifstream file(fileName.c_str(), std::ios_base::in);
     if(!file)
@@ -547,10 +545,8 @@ bool buildObjectGeometryFromOBJ(Object * object, const std::string& fileName, bo
 
     bool hasVt=false;
     bool hasVn=false;
-	std::vector<GLfloat> vertices;
+	
     std::vector<GLfloat> uvs;
-    std::vector<GLfloat> normals;
-    std::vector<GLuint> indices;
     std::vector<GLuint> uvIndices;
     std::vector<GLuint> normalIndices;
     std::string buf, key, name, MTLFileName;
@@ -602,11 +598,18 @@ bool buildObjectGeometryFromOBJ(Object * object, const std::string& fileName, bo
     object->nbVertices=vertices.size()/4;
     object->nbIndices=indices.size();
     
+       
     // Normalizes to 1.0 the size of the mesh and centers it
     centerAndNormalizeMesh(object, vertices.data());
 
-
-    object->sendPrimitives(vertices.data(), indices.data());
+	for (int i=0; i<vertices.size()/4; ++i)
+	{
+		vertices[4*i] *= 4;
+		vertices[4*i+1] *= 2;
+		vertices[4*i+2] *= 4;
+	}
+	
+	object->sendPrimitives(vertices.data(), indices.data());
     if (!hasVt) 
         std::cout<<"       WARNING : Obj file "<<name<<" has no texture coordinates, add some in modeler."<<std::endl;
     else
@@ -632,39 +635,68 @@ bool buildObjectGeometryFromOBJ(Object * object, const std::string& fileName, bo
 
     unsigned int i = 0;
 
+    //std::cout<<object->nbVertices<<std::endl;
+    //std::cout<<vertices.size()<<std::endl;
+
+//    for (i = 0; i</*vertices.size()*/50; ++i) {
+//        std::cout<<i<<" =>"<<vertices.at(i)<<std::endl;
+//    }
+
+//WORKS//
+
     //Associate each vertex to its indice
     for (i = 0; i < object->nbIndices; ++i)
     {
-        std::vector<GLfloat> vectVertices(4);
-        vectVertices.push_back(vertices[indices[i]*4]);
-        vectVertices.push_back(vertices[(indices[i]*4) + 1]);
-        vectVertices.push_back(vertices[(indices[i]*4)] + 2);
-        vectVertices.push_back(vertices[(indices[i]*4)] + 3);
+
+        std::vector<GLfloat> vectVertices;
+
+        vectVertices.push_back(vertices.at(indices[i]*4));
+        vectVertices.push_back(vertices.at((indices[i]*4) + 1));
+        vectVertices.push_back(vertices.at((indices[i]*4) + 2));
+        vectVertices.push_back(vertices.at((indices[i]*4) + 3));
 
         object->mapIndicesVertices.insert(std::pair<GLuint, std::vector<GLfloat> >(indices[i], vectVertices));
 
+			
     }
+
+//WORKS//
+
+    unsigned int idxMap;
 
     //Associate each indices of vertex to the face it belongs to
-    for (i = 0; i < object->nbIndices; i += 3)
+    for (i = 0, idxMap = 0; i < object->nbIndices; i += 3, ++idxMap)
     {
-         std::vector<GLuint> vectIndices(3);
-         vectIndices.push_back(indices[i]);
-         vectIndices.push_back(indices[i + 1]);
-         vectIndices.push_back(indices[i + 2]);
+        std::vector<GLuint> vectIndices;
 
-        object->mapFacesIndices.insert(std::pair<GLuint, std::vector<GLuint> >(i, vectIndices));
+        vectIndices.push_back(indices[i]);
+        vectIndices.push_back(indices[i+1]);
+        vectIndices.push_back(indices[i+2]);
+
+        object->mapFacesIndices.insert(std::pair<GLuint, std::vector<GLuint> >(idxMap, vectIndices));
+
     }
 
+
     //Associate each face to its normal
-    for (i = 0; i < normals.size(); i += 3) {
+    for (i = 0, idxMap = 0; i < normals.size(); i += 3, ++idxMap) {
         std::vector<GLfloat> vectNormals;
+
         vectNormals.push_back(normals[i]);
         vectNormals.push_back(normals[i + 1]);
         vectNormals.push_back(normals[i + 2]);
 
-    object->mapFacesNormals.insert(std::pair<GLuint, std::vector<GLfloat> >(i, vectNormals));
+    object->mapFacesNormals.insert(std::pair<GLuint, std::vector<GLfloat> >(idxMap, vectNormals));
     }
+
+//    std::map<GLuint, std::vector<GLfloat> >::const_iterator itr;
+//
+//    for (itr = object->mapIndicesVertices.begin(); itr != object->mapIndicesVertices.end(); ++itr) {
+//        std::cout<<itr->first<<std::endl;
+//        std::cout<<itr->second[0]<<std::endl;
+//        std::cout<<itr->second[1]<<std::endl;
+//        std::cout<<itr->second[2]<<std::endl;
+//    }
 
     ////
     

@@ -28,6 +28,7 @@ void setToRotate(GLfloat * matrix, GLfloat angle, GLfloat * axis);
 void setPerspective(GLfloat * mat, GLfloat l, GLfloat r, GLfloat b, GLfloat t, GLfloat n, GLfloat f);
 
 void getInverseGenericMatrix(float * A, float * B);
+void multVertexWithMatrix(GLfloat * vertex, GLfloat * matrix, GLfloat * result, GLuint dim);
 void multMatrixBtoMatrixA(GLfloat * A, GLfloat * B);
 
 void printVec2(GLfloat * vect);
