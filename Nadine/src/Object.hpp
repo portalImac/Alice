@@ -32,6 +32,8 @@ class Object
 
 		GLenum primitivesType; // GL_TRIANGLES or GL_LINES
 
+		GLuint nbTriangles;
+		GLfloat* vertices;
 
         Object(GLenum primitivesType=GL_TRIANGLES);
         ~Object();

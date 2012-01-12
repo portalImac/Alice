@@ -416,7 +416,52 @@ void Scene::throwRay(GLfloat xMouse, GLfloat yMouse) {
     }
 
 
-
 }
+
+bool Scene::objectIntersection(GLuint id, GLfloat * boxHalfSize, GLfloat * invTransfoMatrix)
+{
+	bool intersect = false;
+	for (int i=0; i< storedObjects[id]->nbTriangles ; ++i)
+		{
+			GLfloat A[3];
+			A[0] = storedObjects[id]->vertices[12*i] ;
+			A[1] = storedObjects[id]->vertices[12*i+1];
+			A[2] = storedObjects[id]->vertices[12*i+2];
+			A[3] = 1.0;
+			multVertexWithMatrix(A, invTransfoMatrix, A, 4);
+			
+			GLfloat B[3];
+			B[0] = storedObjects[id]->vertices[12*i+4];
+			B[1] = storedObjects[id]->vertices[12*i+5];
+			B[2] = storedObjects[id]->vertices[12*i+6];
+			B[3] = 1.0;
+			multVertexWithMatrix(B, invTransfoMatrix, B, 4);
+			
+			GLfloat C[3];
+			C[0] = storedObjects[id]->vertices[12*i+8];
+			C[1] = storedObjects[id]->vertices[12*i+9];
+			C[2] = storedObjects[id]->vertices[12*i+10];
+			C[3] = 1.0;
+			multVertexWithMatrix(C, invTransfoMatrix, C, 4);
+									
+			GLfloat AB[3] = {B[0]-A[0], B[1]-A[1], B[2]-A[2]};
+			GLfloat AC[3] = {C[0]-A[0], C[1]-A[1], C[2]-A[2]};
+			
+			GLfloat normal[3];
+			vectorProduct(AB, AC, normal);
+			//multVertexWithMatrix(normal, invTransfoMatrix, normal, 3);
+			normalize(normal);
+			//normal[2] = fabs(normal[2]);
+			//std::cout<< normal[0] << " " <<normal[1] << " " << normal[2] << std::endl;
+					
+			intersect = intersectAABBTriangle(boxHalfSize, normal, A, B, C);
+							
+			if (intersect)
+				return true;
+		}
+		
+	return false;
+}
+
 
 
