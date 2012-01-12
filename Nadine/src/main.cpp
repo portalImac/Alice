@@ -132,9 +132,16 @@ int main(int argc, char **argv)
     Object * objectLaby=new Object(GL_TRIANGLES);
     GLuint storedObjectLaby=scene->storeObject(objectLaby);
     bool smoothObjectFlag=true;
-   
     GLuint houseTextureDiffuseID=loadTexture("../textures/mur_contour.ppm");
     GLuint houseTextureSpecularID=loadTexture("../textures/mur_contour.ppm");
+
+    //portal
+    Object * objectPortal = new Object(GL_TRIANGLES);
+    GLuint storedObjectPortal=scene->storeObject(objectPortal);
+    //std::cout<<"IIIIIDDDDDD"<<storedObjectPortal<<std::endl;
+
+    GLuint portalTextureDiffuseID=loadTexture("../textures/mur_contour.ppm");
+    GLuint portalTextureSpecularID=loadTexture("../textures/mur_contour.ppm");
 
     /*Object * objectTr=new Object(GL_TRIANGLES);
     GLuint storedObjectTrID=scene->storeObject(objectTr);*/
@@ -155,7 +162,7 @@ int main(int argc, char **argv)
     buildCircle(objectCible, 0.3, 20);
     
 	//environnement
-    std::string fileName="../objs/mur.obj";
+    std::string fileName="../objs/contour.obj";
     std::vector<GLfloat> verticesObj;
     std::vector<GLuint> indicesObj;
     std::vector<GLfloat> normalsObj;
@@ -202,7 +209,14 @@ int main(int argc, char **argv)
 	for (int i=0; i<24; ++i)
 		std::cout << application->objVertices[i] << " " ;
 	    
-    std::cout << std::endl;      
+    std::cout << std::endl;
+
+    std::string fileNamePortal="../objs/portail.obj";
+    std::vector<GLfloat> verticesObjPortal;
+    std::vector<GLuint> indicesObjPortal;
+    std::vector<GLfloat> normalsObjPortal;
+    buildObjectGeometryFromOBJ(objectPortal, fileNamePortal, smoothObjectFlag, verticesObjPortal, indicesObjPortal, normalsObjPortal);
+
     
     //__________________________________________________________________________
               
@@ -237,6 +251,7 @@ int main(int argc, char **argv)
     //scene->setDrawnObjectModel(labyID, S);
     scene->setDrawnObjectColor(labyID, red);
 	scene->setDrawnObjectShaderID(labyID, lightingShaderID);
+        //std::cout<<"ID SHADER :"<<lightingShaderID<<std::endl;
 	/*cible
     GLuint trID=scene->addObjectToDraw(storedObjectTrID);
     scene->setDrawnObjectShaderID(trID, lightingShaderID);

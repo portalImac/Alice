@@ -10,6 +10,7 @@
 
 
 #include <iostream>
+#include <cmath>
 
 
 // Default constructor
@@ -266,6 +267,11 @@ void Scene::throwRay(GLfloat xMouse, GLfloat yMouse) {
     dir = ray;
 
     bool intersection = false;
+    GLuint nearestObject;
+    GLuint nearestFace;
+    GLfloat distMin = 10000; //LE MAL
+
+    GLfloat coordForPortal[4];
 
     //For each object
     for (GLuint i = 3; i < nbDrawnObjects; ++i) {
@@ -329,6 +335,9 @@ void Scene::throwRay(GLfloat xMouse, GLfloat yMouse) {
 
 //WORKS//
            //get normal face
+           //std::cout<<storedObjects[i]->nbIndices/3<<std::endl;
+           //std::cout<<storedObjects[i]->mapFacesNormals.size()<<std::endl;
+           //std::cout<<storedObjects[i]->mapFacesNormals.find(j->first)->second[0]<<std::endl;
            vectNormal.push_back(storedObjects[i]->mapFacesNormals.find(j->first)->second[0]);
            vectNormal.push_back(storedObjects[i]->mapFacesNormals.find(j->first)->second[1]);
            vectNormal.push_back(storedObjects[i]->mapFacesNormals.find(j->first)->second[2]);
@@ -350,15 +359,64 @@ void Scene::throwRay(GLfloat xMouse, GLfloat yMouse) {
            normal[2] = vectNormal[2];
 
            GLfloat result[3];
+
+           //nearest face of camera
+
+           GLuint nearestFace;
+
            intersection = intersectRayTriangle(this->camera->c, dir, normal, A, B, C, result);
            if (intersection) {
                 //std::cout<<"INTERSECTION"<<std::endl;
                std::cout<<result[0]<<std::endl;
                std::cout<<result[1]<<std::endl;
                std::cout<<result[2]<<std::endl;
+
+               //dist between result and camera
+               GLfloat dist;
+               dist = std::sqrt(std::pow(this->camera->c[0]-result[0], 2) + std::pow(this->camera->c[1]-result[1], 2) + std::pow(this->camera->c[2]-result[2], 2));
+               //std::cout<<dist<<std::endl;
+
+               if (dist < distMin) {
+                   distMin = dist;
+                   nearestFace = j->first;
+                   nearestObject = i;
+                   coordForPortal[0] = result[0];
+                   coordForPortal[1] = result[2];
+                   coordForPortal[3] = result[3];
+               }
+               std::cout<<"DIST : "<<distMin<<std::endl;
+               std::cout<<"FACE : "<<nearestFace<<std::endl;
+               std::cout<<"OBJ : "<<nearestObject<<std::endl;
            }
         }
     }
+
+    if (distMin != 10000) {
+        std::cout<<"AU MOINS UNE INTERSECTION"<<std::endl;
+        GLuint portalID=addObjectToDraw(4); //VOIR POUR LE RECUPERER EN PARAM7TRE OU LE STOCKE DANS L'OBJET
+
+
+        GLfloat S[16];
+        GLfloat s[4] = {0.25,
+                        0.25,
+                        0.25,
+                        1.0
+                        };
+        setToScale(S, s);
+
+        GLfloat t[4] = {coordForPortal[0],
+                        0.0,
+                        coordForPortal[3]};
+        GLfloat T[16];
+        setToTranslate(T, t);
+
+        multMatrixBtoMatrixA(T, S);
+        setDrawnObjectModel(portalID, T);
+        setDrawnObjectShaderID(portalID, 7);
+    }
+
+
+
 }
 
 

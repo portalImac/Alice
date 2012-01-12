@@ -691,11 +691,11 @@ bool buildObjectGeometryFromOBJ(Object * object, const std::string& fileName, bo
 
 //    std::map<GLuint, std::vector<GLfloat> >::const_iterator itr;
 //
-//    for (itr = object->mapIndicesVertices.begin(); itr != object->mapIndicesVertices.end(); ++itr) {
-//        std::cout<<itr->first<<std::endl;
-//        std::cout<<itr->second[0]<<std::endl;
-//        std::cout<<itr->second[1]<<std::endl;
-//        std::cout<<itr->second[2]<<std::endl;
+//    for (itr = object->mapFacesNormals.begin(); itr != object->mapFacesNormals.end(); ++itr) {
+//        std::cout<<"face : "<<itr->first<<std::endl;
+//        std::cout<<"x : "<<itr->second[0]<<std::endl;
+//        std::cout<<"x : "<<itr->second[1]<<std::endl;
+//        std::cout<<"x : "<<itr->second[2]<<std::endl;
 //    }
 
     ////
