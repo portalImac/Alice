@@ -127,27 +127,19 @@ int main(int argc, char **argv)
     // Définition de la cible
     Object * objectCible=new Object(GL_LINES);
     GLuint storedObjectCibleID=scene->storeObject(objectCible);
-    
+  
     // Environnement
     Object * objectLaby=new Object(GL_TRIANGLES);
     GLuint storedObjectLaby=scene->storeObject(objectLaby);
     bool smoothObjectFlag=true;
-<<<<<<< HEAD
-    
+   
     GLuint houseTextureDiffuseID=loadTexture("../textures/mur_contour.ppm");
     GLuint houseTextureSpecularID=loadTexture("../textures/mur_contour.ppm");
-    
-=======
-
-    GLuint houseTextureDiffuseID=loadTexture("../textures/texture.ppm");
-    GLuint houseTextureSpecularID=loadTexture("../textures/texture.ppm");
 
     /*Object * objectTr=new Object(GL_TRIANGLES);
     GLuint storedObjectTrID=scene->storeObject(objectTr);*/
-        
->>>>>>> cef1519ed10076e491a5977df8ad40c0e476b955
-    
-	//__________________________________________________________________________ 
+
+//__________________________________________________________________________ 
 
     // Object building
     std::cout<<"    Generic objects building :"<<std::endl;
