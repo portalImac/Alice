@@ -533,7 +533,7 @@ void conformToObject(std::vector<GLfloat> * vertices, std::vector<GLfloat> * uvs
 }
 
 
-bool buildObjectGeometryFromOBJ(Object * object, const std::string& fileName, bool smoothObject, std::vector<GLfloat> & vertices, std::vector<GLuint> & indices, std::vector<GLfloat> & normals)
+bool buildObjectGeometryFromOBJ(Object * object, const std::string& fileName, bool smoothObject, GLint scaleX = 1, GLint scaleY = 1, GLint scaleZ = 1)
 {
     std::ifstream file(fileName.c_str(), std::ios_base::in);
     if(!file)
@@ -546,6 +546,9 @@ bool buildObjectGeometryFromOBJ(Object * object, const std::string& fileName, bo
     bool hasVt=false;
     bool hasVn=false;
 	
+	std::vector<GLfloat> vertices;
+	std::vector<GLfloat> normals;
+	std::vector<GLuint> indices;
     std::vector<GLfloat> uvs;
     std::vector<GLuint> uvIndices;
     std::vector<GLuint> normalIndices;
@@ -604,9 +607,32 @@ bool buildObjectGeometryFromOBJ(Object * object, const std::string& fileName, bo
 
 	for (int i=0; i<vertices.size()/4; ++i)
 	{
-		vertices[4*i] *= 4;
-		vertices[4*i+1] *= 2;
-		vertices[4*i+2] *= 4;
+		vertices[4*i] *= scaleX;
+		vertices[4*i+1] *= scaleY;
+		vertices[4*i+2] *= scaleZ;
+	}
+	
+	object->nbTriangles = indices.size() / 3;
+    object->vertices = new GLfloat[object->nbTriangles * 12];
+       
+    
+    for (int i=0; i<object->nbTriangles; ++i)
+
+	{
+      object->vertices[12*i] = vertices[4*indices[3*i]];
+	  object->vertices[12*i+1] = vertices[4*indices[3*i]+1];
+	  object->vertices[12*i+2] = vertices[4*indices[3*i]+2];
+	  object->vertices[12*i+3] = vertices[4*indices[3*i]+3];
+	  
+	  object->vertices[12*i+4] = vertices[4*indices[3*i+1]];
+	  object->vertices[12*i+5] = vertices[4*indices[3*i+1]+1];
+	  object->vertices[12*i+6] = vertices[4*indices[3*i+1]+2];
+	  object->vertices[12*i+7] = vertices[4*indices[3*i+1]+3];
+	  
+	  object->vertices[12*i+8] = vertices[4*indices[3*i+2]];
+	  object->vertices[12*i+9] = vertices[4*indices[3*i+2]+1];
+	  object->vertices[12*i+10] = vertices[4*indices[3*i+2]+2];
+	  object->vertices[12*i+11] = vertices[4*indices[3*i+2]+3];
 	}
 	
 	object->sendPrimitives(vertices.data(), indices.data());

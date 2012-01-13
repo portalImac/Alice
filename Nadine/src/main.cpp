@@ -38,8 +38,8 @@ int main(int argc, char **argv)
 
     // Camera position and orientation
     std::cout<<"    Camera settings"<<std::endl;
-    scene->camera->c[2]=4.0; // Position of the camera
-    scene->camera->c[1]=0.0; // Position of the camera
+    scene->camera->c[2]=6.0; // Position of the camera
+    scene->camera->c[1]=0.2; // Position of the camera
     scene->camera->c[0]=0.0; // Position of the camera
     scene->camera->updateView();
 
@@ -162,41 +162,12 @@ int main(int argc, char **argv)
     buildCircle(objectCible, 0.3, 20);
     
 	//environnement
-    std::string fileName="../objs/murlaby.obj";
-    std::vector<GLfloat> verticesObj;
-    std::vector<GLuint> indicesObj;
-    std::vector<GLfloat> normalsObj;
-    buildObjectGeometryFromOBJ(objectLaby, fileName, smoothObjectFlag, verticesObj, indicesObj, normalsObj);
-  
-    application->nbTriangles = indicesObj.size() / 3;
-    application->nbVertices = verticesObj.size() / 4;
-    
-    application->objVertices = new GLfloat[application->nbTriangles * 12];
-    application->objIndices = new GLuint[indicesObj.size()];
-    application->objNormals = new GLfloat[application->nbTriangles * 3];
-    
-    
-    
-    for (int i=0; i<application->nbTriangles; ++i)
 
-	{
-      application->objVertices[12*i] = verticesObj[4*indicesObj[3*i]];
-	  application->objVertices[12*i+1] = verticesObj[4*indicesObj[3*i]+1];
-	  application->objVertices[12*i+2] = verticesObj[4*indicesObj[3*i]+2];
-	  application->objVertices[12*i+3] = verticesObj[4*indicesObj[3*i]+3];
-	  
-	  application->objVertices[12*i+4] = verticesObj[4*indicesObj[3*i+1]];
-	  application->objVertices[12*i+5] = verticesObj[4*indicesObj[3*i+1]+1];
-	  application->objVertices[12*i+6] = verticesObj[4*indicesObj[3*i+1]+2];
-	  application->objVertices[12*i+7] = verticesObj[4*indicesObj[3*i+1]+3];
-	  
-	  application->objVertices[12*i+8] = verticesObj[4*indicesObj[3*i+2]];
-	  application->objVertices[12*i+9] = verticesObj[4*indicesObj[3*i+2]+1];
-	  application->objVertices[12*i+10] = verticesObj[4*indicesObj[3*i+2]+2];
-	  application->objVertices[12*i+11] = verticesObj[4*indicesObj[3*i+2]+3];
-	}
-	
-	std::cout << indicesObj[3] << " " << indicesObj[4] << indicesObj[5] << std::endl;
+    std::string fileName="../objs/contour.obj";
+   
+    buildObjectGeometryFromOBJ(objectLaby, fileName, smoothObjectFlag, 10,10,10);
+  
+    /*std::cout << indicesObj[3] << " " << indicesObj[4] << indicesObj[5] << std::endl;
 	
 	std::cout << verticesObj[11*4] << " " << verticesObj[11*4+1] << " " << verticesObj[11*4+2] << " " << verticesObj[11*4+3] << std::endl;
 	std::cout << verticesObj[10*4] << " " << verticesObj[10*4+1] << " " << verticesObj[10*4+2] << " " << verticesObj[10*4+3] << std::endl;
@@ -215,7 +186,14 @@ int main(int argc, char **argv)
     std::vector<GLfloat> verticesObjPortal;
     std::vector<GLuint> indicesObjPortal;
     std::vector<GLfloat> normalsObjPortal;
-    buildObjectGeometryFromOBJ(objectPortal, fileNamePortal, smoothObjectFlag, verticesObjPortal, indicesObjPortal, normalsObjPortal);
+    buildObjectGeometryFromOBJ(objectPortal, fileNamePortal, smoothObjectFlag, verticesObjPortal, indicesObjPortal, normalsObjPortal);*/
+
+
+    /*std::string fileNamePortal="../objs/portail.obj";
+    std::vector<GLfloat> verticesObjPortal;
+    std::vector<GLuint> indicesObjPortal;
+    std::vector<GLfloat> normalsObjPortal;
+    buildObjectGeometryFromOBJ(objectPortal, fileNamePortal, smoothObjectFlag, verticesObjPortal, indicesObjPortal, normalsObjPortal);*/
 
     
     //__________________________________________________________________________

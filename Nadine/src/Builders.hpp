@@ -38,7 +38,7 @@ void reorderUvsAndNormalsIfSmooth(std::vector<GLfloat> * vertices, std::vector<G
 void reorderUvsAndNormalsIfNonSmooth(std::vector<GLfloat> * vertices, std::vector<GLfloat> * uvs, std::vector<GLfloat> * normals,
                                      std::vector<GLuint> * indices, std::vector<GLuint> * uvIndices, std::vector<GLuint> * normalsIndices);
 void addHomogeneousToVertices(std::vector<GLfloat> * vertices);
-bool buildObjectGeometryFromOBJ(Object * object, const std::string& fileName, bool smoothObject, std::vector<GLfloat> & vertices, std::vector<GLuint> & indices, std::vector<GLfloat> & normals);
+bool buildObjectGeometryFromOBJ(Object * object, const std::string& fileName, bool smoothObject, GLint scaleX, GLint scaleY, GLint scaleZ);
 
 
 #endif

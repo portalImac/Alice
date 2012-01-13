@@ -73,6 +73,7 @@ class Scene
         void drawObjectsOfScene();
 
         void throwRay(GLfloat xMouse, GLfloat yMouse);
+        bool objectIntersection(GLuint id, GLfloat * boxHalfSize, GLfloat * invTransfoMatrix);
 };
 
 #endif // __SCENE_HPP__widthScene, unsigned int heightScene

@@ -60,12 +60,7 @@ class Application
         Scene * scene;                          // Scene to draw
         
         GLfloat backgroundColor[4];             // Color of the background;
-
-		GLuint nbVertices;
-		GLuint nbTriangles;
-		GLfloat* objVertices;
-		GLuint* objIndices;
-		GLfloat* objNormals;
+		
 		GLfloat boxHalfSize[3];
 		
         Application(unsigned int width, unsigned int height);
