@@ -162,7 +162,7 @@ int main(int argc, char **argv)
     buildCircle(objectCible, 0.3, 20);
     
 	//environnement
-    std::string fileName="../objs/contour.obj";
+    std::string fileName="../objs/murlaby.obj";
     std::vector<GLfloat> verticesObj;
     std::vector<GLuint> indicesObj;
     std::vector<GLfloat> normalsObj;
