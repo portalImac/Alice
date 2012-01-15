@@ -39,7 +39,7 @@ int main(int argc, char **argv)
     // Camera position and orientation
     std::cout<<"    Camera settings"<<std::endl;
     scene->camera->c[2]=6.0; // Position of the camera
-    scene->camera->c[1]=0.2; // Position of the camera
+    scene->camera->c[1]=0.0; // Position of the camera
     scene->camera->c[0]=0.0; // Position of the camera
     scene->camera->updateView();
 
@@ -162,7 +162,6 @@ int main(int argc, char **argv)
     buildCircle(objectCible, 0.3, 20);
     
 	//environnement
-
     std::string fileName="../objs/contour.obj";
    
     buildObjectGeometryFromOBJ(objectLaby, fileName, smoothObjectFlag, 10,10,10);

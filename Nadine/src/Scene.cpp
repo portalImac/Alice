@@ -267,9 +267,9 @@ void Scene::throwRay(GLfloat xMouse, GLfloat yMouse) {
     dir = ray;
 
     bool intersection = false;
-    int nearestObject = -1;
-    int nearestFace = -1;
-    GLfloat distMin = -1; //LE MAL
+    GLuint nearestObject;
+    GLuint nearestFace;
+    GLfloat distMin = 10000; //LE MAL
 
     GLfloat coordForPortal[4];
 
@@ -376,7 +376,7 @@ void Scene::throwRay(GLfloat xMouse, GLfloat yMouse) {
                dist = std::sqrt(std::pow(this->camera->c[0]-result[0], 2) + std::pow(this->camera->c[1]-result[1], 2) + std::pow(this->camera->c[2]-result[2], 2));
                //std::cout<<dist<<std::endl;
 
-               if (dist < distMin && dist != -1) {
+               if (dist < distMin) {
                    distMin = dist;
                    nearestFace = j->first;
                    nearestObject = i;
@@ -391,7 +391,7 @@ void Scene::throwRay(GLfloat xMouse, GLfloat yMouse) {
         }
     }
 
-    if (distMin != -1) {
+    if (distMin != 10000) {
         std::cout<<"AU MOINS UNE INTERSECTION"<<std::endl;
         GLuint portalID=addObjectToDraw(4); //VOIR POUR LE RECUPERER EN PARAM7TRE OU LE STOCKE DANS L'OBJET
 
